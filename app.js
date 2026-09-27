@@ -49,6 +49,7 @@
     const symbol = roundOutcome === "draw" ? "!" : (player === "X" ? "×" : "○");
     const className = roundOutcome === "draw" ? "draw-status" : (player === "X" ? "x-turn" : "o-turn");
     status.innerHTML = '<span class="status-player ' + className + '" aria-hidden="true">' + symbol + '</span> ' + message;
+    status.classList.toggle("winner-status", roundOutcome === "X" || roundOutcome === "O");
   }
 
   function finishRound(winner, line) {
@@ -56,7 +57,12 @@
     cells.forEach((cell) => { cell.disabled = true; });
     if (winner) {
       roundOutcome = winner;
+      boardNode.classList.add("winner-board");
+      status.classList.add("winner-status");
       line.forEach((index) => cells[index].classList.add("winning-cell"));
+      cells.forEach((cell, index) => {
+        if (board[index] && board[index] !== winner) cell.classList.add("losing-cell");
+      });
       scores[winner] += 1;
       scoreXNode.textContent = scores.X;
       scoreONode.textContent = scores.O;
@@ -105,11 +111,13 @@
     roundOver = false;
     roundOutcome = "";
     boardNode.classList.remove("draw-board");
+    boardNode.classList.remove("winner-board");
     boardWrap.classList.remove("draw-board-wrap");
+    status.classList.remove("winner-status");
     cells.forEach((cell, index) => {
       cell.textContent = "";
       cell.disabled = false;
-      cell.classList.remove("played-x", "played-o", "winning-cell", "draw-cell");
+      cell.classList.remove("played-x", "played-o", "winning-cell", "losing-cell", "draw-cell");
       cell.setAttribute("aria-label", 'Row ' + (Math.floor(index / 3) + 1) + ', column ' + ((index % 3) + 1) + ', empty');
     });
     setStatus();

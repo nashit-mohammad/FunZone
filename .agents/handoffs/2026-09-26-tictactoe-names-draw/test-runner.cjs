@@ -10,6 +10,12 @@ class FakeElement {
       add: (...values) => values.forEach((value) => this.classList.values.add(value)),
       remove: (...values) => values.forEach((value) => this.classList.values.delete(value)),
       contains: (value) => this.classList.values.has(value),
+      toggle: (value, force) => {
+        const shouldAdd = force === undefined ? !this.classList.values.has(value) : force;
+        if (shouldAdd) this.classList.values.add(value);
+        else this.classList.values.delete(value);
+        return shouldAdd;
+      },
     };
     this.listeners = {};
     this.attributes = {};
