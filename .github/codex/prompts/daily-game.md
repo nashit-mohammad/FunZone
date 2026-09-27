@@ -1,6 +1,6 @@
 # Daily FunZone game task
 
-Add today's game to the FunZone website. Follow `AGENTS.md`, `RTK.md`, and `.agents/README.md`. The workflow created an intake folder at the path in `DAILY_GAME_HANDOFF_DIR`; use that folder for `request.md`, `analysis.md`, `implementation.md`, `test-plan.md`, `test-report.md`, and `status.md`. Proceed through Orchestrator → Analyser → Developer → Tester → Orchestrator in this run and record each same-session handoff. Do not claim that separate sessions ran.
+Add today's game to the FunZone website. Follow repository-root `AGENTS.md` (including the persona matching your current stage) and `RTK.md`. The workflow creates the normal handoff folder at `.agents/handoffs/<timestamp>-daily-game-<run-id>/` and passes its path as `DAILY_GAME_HANDOFF_DIR`. Use that exact folder for all six standard artifacts: `request.md`, `analysis.md`, `implementation.md`, `test-plan.md`, `test-report.md`, and `status.md`. The workflow initializes `request.md` and `status.md` before this run; read them first and preserve their intake history. Proceed through Orchestrator → Analyser → Developer → Tester → Orchestrator in this run, update `status.md` at every handoff, and complete each role artifact from its template. Do not create another handoff location or claim that separate sessions ran.
 
 ## Request to record verbatim
 
@@ -20,6 +20,6 @@ Add today's game to the FunZone website. Follow `AGENTS.md`, `RTK.md`, and `.age
 
 - Inspect the full diff for broken selectors, duplicate IDs, dead controls, unsafe HTML insertion, responsive issues, and regressions.
 - Do not install dependencies. Run tests only if authorized by repository instructions or the user's request; record checks and limitations honestly.
-- Tester reports actionable defects to Developer. Orchestrator prepares handoff artifacts before the workflow opens a PR.
+- Tester reports actionable defects to Developer and retests fixes. Orchestrator completes the standard `.agents/handoffs/` record before the workflow uploads it and opens a PR.
 - If a safe, distinct game cannot be completed, leave app files unchanged and explain why in the handoff; no code diff means no PR.
 - Start `implementation.md` with `Game name: <name>`, then record the mechanic, changed files, validation, and limitations. This line is used as the PR title.

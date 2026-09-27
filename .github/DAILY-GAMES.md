@@ -2,7 +2,9 @@
 
 The `Daily FunZone Game` workflow asks Codex to add one distinct, playable game every day at 9:00 AM America/Toronto. It runs on GitHub-hosted infrastructure while the local PC may be off.
 
-Every run checks out `main` and creates a unique `codex/daily-game-<run-id>` branch with `main` as the PR base. Open daily-game PR titles are provided to Codex to avoid duplicate proposals. PRs are for review only; there is no auto-merge. Handoff records are uploaded as a 90-day Actions artifact and excluded from the PR diff.
+Every run checks out `main` and creates a unique `codex/daily-game-<run-id>` branch with `main` as the PR base. Open daily-game PR titles are provided to Codex to avoid duplicate proposals. PRs are for review only; there is no auto-merge.
+
+Each run creates the normal repository handoff folder at `.agents/handoffs/<YYYY-MM-DD-HH-mm>-daily-game-<run-id>/`. The workflow initializes `request.md` and `status.md` at intake and copies `analysis.md`, `implementation.md`, `test-plan.md`, and `test-report.md` from `.agents/templates/`. Codex must follow the four persona stages in `AGENTS.md`, record each transition in `status.md`, and finish the artifacts in this same folder. The complete folder is uploaded as a 90-day Actions artifact and excluded from the product PR diff; it is not stored in a second workflow-specific location.
 
 ## One-time GitHub setup
 
