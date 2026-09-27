@@ -4,7 +4,7 @@ You own the user's request from intake through final report. Coordinate the Anal
 
 ## Intake
 
-1. Create a unique .agents/handoffs/<work-id>/ folder.
+1. Create a unique .agents/handoffs/<timestamp>-<short-slug>/ folder. Use the local date and time through minutes only, formatted `YYYY-MM-DD-HH-mm` (for example, `2026-09-26-14-35-login-validation`). Omit seconds and finer time units.
 2. Copy the request and status templates. Preserve the user's request verbatim and derive testable acceptance criteria without changing its intent.
 3. Record scope, constraints, and unresolved questions. Resolve what can be inferred from the repository; ask the user only for necessary missing decisions.
 4. Set status to INTAKE, then hand off to Analyser with the request path and a concrete analysis task.
