@@ -60,10 +60,34 @@
             <div class="card-info"><div><h3>Memory Match</h3><p>Can you remember them all?</p></div><span class="player-tag">1 PLAYER</span></div>
             <button class="play-button" id="play-memory-match" type="button">Play this game <span aria-hidden="true">→</span></button>
           </article>
+          <article class="game-card featured-card featured-star-card">
+            <div class="card-topline"><span class="game-number">03 / NOW PLAYING</span><span class="card-arrow" aria-hidden="true">↗</span></div>
+            <div class="game-art star-art" aria-hidden="true"><span class="star-art-planet">🪐</span><span class="star-art-scout">🚀</span><span class="star-art-spark star-spark-one">✦</span><span class="star-art-spark star-spark-two">✧</span></div>
+            <div class="card-info"><div><h3>Star Scout</h3><p>Collect stars and find your rocket.</p></div><span class="player-tag">1 PLAYER</span></div>
+            <button class="play-button" id="play-star-scout" type="button">Play this game <span aria-hidden="true">→</span></button>
+          </article>
           <article class="game-card coming-card">
-            <div class="card-topline"><span class="game-number">03 / COMING SOON</span><span class="lock-icon" aria-hidden="true">✳</span></div>
+            <div class="card-topline"><span class="game-number">04 / COMING SOON</span><span class="lock-icon" aria-hidden="true">✳</span></div>
             <div class="game-art reaction-art"><div class="reaction-ring"><span>!</span></div><span class="reaction-spark spark-a">✦</span><span class="reaction-spark spark-b">✳</span></div>
             <div class="card-info"><div><h3>Quick Draw</h3><p>Fast fingers. Faster bragging rights.</p></div></div>
+            <div class="coming-label"><span></span> ADDING THE FUN</div>
+          </article>
+          <article class="game-card coming-card">
+            <div class="card-topline"><span class="game-number">05 / COMING SOON</span><span class="lock-icon" aria-hidden="true">✳</span></div>
+            <div class="game-art bubble-art" aria-hidden="true"><span class="bubble bubble-one"></span><span class="bubble bubble-two"></span><span class="bubble bubble-three"></span><span class="bubble bubble-four"></span></div>
+            <div class="card-info"><div><h3>Bubble Pop</h3><p>Pop a path through a rainbow of bubbles.</p></div></div>
+            <div class="coming-label"><span></span> ADDING THE FUN</div>
+          </article>
+          <article class="game-card coming-card">
+            <div class="card-topline"><span class="game-number">06 / COMING SOON</span><span class="lock-icon" aria-hidden="true">✳</span></div>
+            <div class="game-art dino-art" aria-hidden="true"><span>🦖</span><i>✦</i><i>✦</i></div>
+            <div class="card-info"><div><h3>Dino Dash</h3><p>Help a tiny dino leap over trouble.</p></div></div>
+            <div class="coming-label"><span></span> ADDING THE FUN</div>
+          </article>
+          <article class="game-card coming-card">
+            <div class="card-topline"><span class="game-number">07 / COMING SOON</span><span class="lock-icon" aria-hidden="true">✳</span></div>
+            <div class="game-art word-art" aria-hidden="true"><span>W</span><span>O</span><span>R</span><span>D</span><b>✦</b></div>
+            <div class="card-info"><div><h3>Word Wizard</h3><p>Mix letters and make a little magic.</p></div></div>
             <div class="coming-label"><span></span> ADDING THE FUN</div>
           </article>
         </div>
@@ -122,6 +146,37 @@
           <div class="memory-board-wrap">
             <div class="board-status" id="memory-status" role="status" aria-live="polite">Choose any card to start.</div>
             <div class="memory-board" id="memory-board" role="group" aria-label="Memory Match cards"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="star-section" id="star-scout" aria-labelledby="star-title">
+        <div class="play-heading">
+          <div><p class="eyebrow section-eyebrow">A TINY SPACE ADVENTURE</p><h2 id="star-title">Star Scout<span class="heading-period">.</span></h2></div>
+          <p class="section-aside">Find all three stars, then reach your rocket!</p>
+        </div>
+        <div class="star-panel">
+          <div class="star-game-info">
+            <span class="round-label"><span class="pulse-dot" aria-hidden="true"></span> READY, SPACE SCOUT?</span>
+            <h3>Off you<br>go!</h3>
+            <p>Guide your little explorer around the space rocks. Grab all three stars, then make it to the rocket.</p>
+            <div class="star-stats" aria-label="Game progress">
+              <div><span>STARS</span><strong id="star-count">0 / 3</strong></div>
+              <div><span>MOVES</span><strong id="star-moves">0</strong></div>
+            </div>
+            <button class="reset-button" id="star-reset" type="button"><span aria-hidden="true">↻</span> Start over</button>
+          </div>
+          <div class="star-board-wrap">
+            <div class="board-status star-status" id="star-status" role="status" aria-live="polite">Explorer at row 5, column 1. Collect all three stars and reach the rocket.</div>
+            <div class="star-map" id="star-map" role="group" tabindex="0" aria-label="Star Scout map. Focus here and use the arrow keys to move." aria-describedby="star-map-description star-controls-hint"></div>
+            <p class="visually-hidden" id="star-map-description">The map is five rows by five columns. You start at row 5, column 1. Stars are at row 1, column 2; row 3, column 4; and row 5, column 4. Rocks are at row 2, column 2; row 2, column 4; row 4, column 2; and row 4, column 4. The rocket is at row 1, column 5.</p>
+            <p class="star-controls-hint" id="star-controls-hint">Focus the map and use your arrow keys, or tap a direction.</p>
+            <div class="star-controls" role="group" aria-label="Move the space explorer">
+              <button type="button" data-scout-direction="up" aria-label="Move up">↑</button>
+              <button type="button" data-scout-direction="left" aria-label="Move left">←</button>
+              <button type="button" data-scout-direction="down" aria-label="Move down">↓</button>
+              <button type="button" data-scout-direction="right" aria-label="Move right">→</button>
+            </div>
           </div>
         </div>
       </section>

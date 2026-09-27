@@ -271,4 +271,141 @@
     });
     startMemoryGame();
   }
+
+  const scoutMap = document.querySelector("#star-map");
+  const scoutPlayButton = document.querySelector("#play-star-scout");
+  const scoutResetButton = document.querySelector("#star-reset");
+  if (scoutMap && scoutPlayButton && scoutResetButton) {
+    const scoutStatus = document.querySelector("#star-status");
+    const starCountNode = document.querySelector("#star-count");
+    const starMovesNode = document.querySelector("#star-moves");
+    const scoutControls = [...document.querySelectorAll("[data-scout-direction]")];
+    const mapWidth = 5;
+    const startPosition = 20;
+    const rocketPosition = 4;
+    const rocks = new Set([6, 8, 16, 18]);
+    const starPositions = new Set([1, 13, 23]);
+    const collectedStars = new Set();
+    const directions = {
+      up: { row: -1, column: 0 },
+      down: { row: 1, column: 0 },
+      left: { row: 0, column: -1 },
+      right: { row: 0, column: 1 },
+    };
+    const scoutTiles = Array.from({ length: mapWidth * mapWidth }, () => {
+      const tile = document.createElement("span");
+      tile.className = "star-cell";
+      tile.setAttribute("aria-hidden", "true");
+      scoutMap.append(tile);
+      return tile;
+    });
+    let scoutPosition = startPosition;
+    let scoutMoves = 0;
+    let scoutFinished = false;
+
+    function drawScoutMap() {
+      scoutTiles.forEach((tile, index) => {
+        tile.className = "star-cell";
+        if (rocks.has(index)) {
+          tile.classList.add("is-rock");
+          tile.textContent = "🪨";
+        } else if (index === rocketPosition) {
+          tile.classList.add("is-rocket");
+          tile.textContent = "🚀";
+        } else if (starPositions.has(index) && !collectedStars.has(index)) {
+          tile.classList.add("has-star");
+          tile.textContent = "⭐";
+        } else {
+          tile.textContent = "";
+        }
+        if (index === scoutPosition) {
+          tile.classList.add("has-scout");
+          tile.textContent = "🧑‍🚀";
+        }
+      });
+      starCountNode.textContent = collectedStars.size + " / " + starPositions.size;
+      starMovesNode.textContent = scoutMoves;
+      scoutControls.forEach((control) => { control.disabled = scoutFinished; });
+    }
+
+    function moveScout(directionName) {
+      if (scoutFinished) return;
+      const direction = directions[directionName];
+      if (!direction) return;
+      const row = Math.floor(scoutPosition / mapWidth);
+      const column = scoutPosition % mapWidth;
+      const nextRow = row + direction.row;
+      const nextColumn = column + direction.column;
+
+      if (nextRow < 0 || nextRow >= mapWidth || nextColumn < 0 || nextColumn >= mapWidth) {
+        scoutStatus.textContent = "That's the edge of space. Try another direction!";
+        return;
+      }
+
+      const nextPosition = nextRow * mapWidth + nextColumn;
+      if (rocks.has(nextPosition)) {
+        scoutStatus.textContent = "A space rock is in the way. Try a different path!";
+        return;
+      }
+
+      scoutPosition = nextPosition;
+      scoutMoves += 1;
+      let message = "You are at row " + (nextRow + 1) + ", column " + (nextColumn + 1) + ". ";
+
+      if (starPositions.has(scoutPosition) && !collectedStars.has(scoutPosition)) {
+        collectedStars.add(scoutPosition);
+        message += "Star collected! ";
+      }
+
+      if (scoutPosition === rocketPosition) {
+        if (collectedStars.size === starPositions.size) {
+          scoutFinished = true;
+          message += "Mission complete! You found all three stars and reached your rocket in " + scoutMoves + " moves. Great exploring!";
+        } else {
+          message += "Rocket spotted! Find " + (starPositions.size - collectedStars.size) + " more " + (starPositions.size - collectedStars.size === 1 ? "star" : "stars") + " before takeoff.";
+        }
+      } else if (!message.includes("Star collected!")) {
+        message += collectedStars.size === starPositions.size ? "All stars found! Head to your rocket!" : "Keep looking for stars!";
+      } else {
+        message += "You have " + collectedStars.size + " of " + starPositions.size + " stars. " + (collectedStars.size === starPositions.size ? "Head to your rocket!" : "Keep going!");
+      }
+
+      scoutStatus.textContent = message;
+      drawScoutMap();
+    }
+
+    function resetScout() {
+      scoutPosition = startPosition;
+      scoutMoves = 0;
+      scoutFinished = false;
+      collectedStars.clear();
+      scoutStatus.textContent = "Explorer at row 5, column 1. Collect all three stars and reach the rocket.";
+      drawScoutMap();
+    }
+
+    scoutControls.forEach((control) => {
+      control.addEventListener("click", () => moveScout(control.dataset.scoutDirection));
+    });
+    scoutMap.addEventListener("keydown", (event) => {
+      const directionByKey = {
+        ArrowUp: "up",
+        ArrowDown: "down",
+        ArrowLeft: "left",
+        ArrowRight: "right",
+      };
+      const direction = directionByKey[event.key];
+      if (!direction) return;
+      event.preventDefault();
+      moveScout(direction);
+    });
+    scoutResetButton.addEventListener("click", resetScout);
+    scoutPlayButton.addEventListener("click", () => {
+      document.querySelector("#star-scout").scrollIntoView({
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+        block: "start",
+      });
+      window.setTimeout(() => scoutMap.focus({ preventScroll: true }), 350);
+    });
+    drawScoutMap();
+  }
 })();
