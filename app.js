@@ -408,4 +408,159 @@
     });
     drawScoutMap();
   }
+
+  const dinoStage = document.querySelector("#dino-stage");
+  const dinoPlayButton = document.querySelector("#play-dino-dash");
+  const dinoStartButton = document.querySelector("#dino-start");
+  const dinoJumpButton = document.querySelector("#dino-jump");
+  const dinoResetButton = document.querySelector("#dino-reset");
+  if (dinoStage && dinoPlayButton && dinoStartButton && dinoJumpButton && dinoResetButton) {
+    const dinoRunner = document.querySelector("#dino-runner");
+    const dinoObstacle = document.querySelector("#dino-obstacle");
+    const dinoStatus = document.querySelector("#dino-status");
+    const dinoScoreNode = document.querySelector("#dino-score");
+    const dinoBestNode = document.querySelector("#dino-best");
+    const runnerLeft = 42;
+    const runnerWidth = 54;
+    const runnerHeight = 54;
+    const obstacleWidth = 38;
+    const obstacleHeight = 48;
+    let running = false;
+    let frameId = null;
+    let lastFrameTime = 0;
+    let jumpHeight = 0;
+    let verticalVelocity = 0;
+    let obstacleX = dinoStage.clientWidth + 90;
+    let speed = 320;
+    let score = 0;
+    let bestScore = 0;
+    let obstacleScored = false;
+
+    function drawDinoScene() {
+      dinoRunner.style.transform = "translateY(" + -jumpHeight + "px)";
+      dinoObstacle.style.transform = "translateX(" + obstacleX + "px)";
+    }
+
+    function resetDinoRun() {
+      running = false;
+      if (frameId !== null) window.cancelAnimationFrame(frameId);
+      frameId = null;
+      lastFrameTime = 0;
+      jumpHeight = 0;
+      verticalVelocity = 0;
+      obstacleX = dinoStage.clientWidth + 90;
+      speed = 320;
+      score = 0;
+      obstacleScored = false;
+      dinoScoreNode.textContent = "0";
+      dinoBestNode.textContent = bestScore;
+      dinoStartButton.disabled = false;
+      dinoStartButton.textContent = "Start run";
+      dinoJumpButton.disabled = true;
+      dinoStatus.textContent = "Press Start run when you're ready.";
+      drawDinoScene();
+    }
+
+    function finishDinoRun() {
+      running = false;
+      frameId = null;
+      dinoStartButton.disabled = false;
+      dinoStartButton.textContent = "Run again";
+      dinoJumpButton.disabled = true;
+      const pointWord = score === 1 ? "cactus" : "cacti";
+      dinoStatus.textContent = "Oh no, you hit a cactus! You cleared " + score + " " + pointWord + ". Press Run again to play another round.";
+    }
+
+    function updateDinoFrame(time) {
+      if (!running) return;
+      const delta = Math.min((time - lastFrameTime) / 1000, 0.05);
+      lastFrameTime = time;
+      const floorTop = dinoStage.clientHeight - 24;
+
+      if (jumpHeight > 0 || verticalVelocity > 0) {
+        jumpHeight += verticalVelocity * delta;
+        verticalVelocity -= 1750 * delta;
+        if (jumpHeight <= 0) {
+          jumpHeight = 0;
+          verticalVelocity = 0;
+        }
+      }
+
+      obstacleX -= speed * delta;
+      const runnerTop = floorTop - runnerHeight - jumpHeight;
+      const runnerBottom = floorTop - jumpHeight;
+      const obstacleTop = floorTop - obstacleHeight;
+      const horizontalOverlap = runnerLeft + runnerWidth - 7 > obstacleX + 5
+        && runnerLeft + 7 < obstacleX + obstacleWidth - 5;
+      const verticalOverlap = runnerTop + 8 < floorTop - 4 && runnerBottom - 5 > obstacleTop + 3;
+
+      if (horizontalOverlap && verticalOverlap) {
+        drawDinoScene();
+        finishDinoRun();
+        return;
+      }
+
+      if (!obstacleScored && obstacleX + obstacleWidth < runnerLeft) {
+        obstacleScored = true;
+        score += 1;
+        bestScore = Math.max(bestScore, score);
+        dinoScoreNode.textContent = score;
+        dinoBestNode.textContent = bestScore;
+        dinoStatus.textContent = "Cactus cleared! Your score is " + score + ". Keep running and watch for the next one.";
+        speed = Math.min(560, 320 + score * 16);
+      }
+
+      if (obstacleX + obstacleWidth < 0) {
+        obstacleX = dinoStage.clientWidth + 150 + Math.random() * 130;
+        obstacleScored = false;
+      }
+
+      drawDinoScene();
+      frameId = window.requestAnimationFrame(updateDinoFrame);
+    }
+
+    function jumpDino() {
+      if (!running || jumpHeight > 0) return;
+      verticalVelocity = 650;
+    }
+
+    function startDinoRun() {
+      if (frameId !== null) window.cancelAnimationFrame(frameId);
+      running = true;
+      frameId = null;
+      lastFrameTime = 0;
+      jumpHeight = 0;
+      verticalVelocity = 0;
+      obstacleX = dinoStage.clientWidth + 90;
+      speed = 320;
+      score = 0;
+      obstacleScored = false;
+      dinoScoreNode.textContent = "0";
+      dinoStartButton.disabled = true;
+      dinoStartButton.textContent = "Running…";
+      dinoJumpButton.disabled = false;
+      dinoStatus.textContent = "Run started! Jump over the cactus.";
+      drawDinoScene();
+      dinoStage.focus({ preventScroll: true });
+      frameId = window.requestAnimationFrame(updateDinoFrame);
+    }
+
+    dinoStage.addEventListener("keydown", (event) => {
+      if ((event.code === "Space" || event.code === "ArrowUp") && !event.repeat) {
+        event.preventDefault();
+        jumpDino();
+      }
+    });
+    dinoStartButton.addEventListener("click", startDinoRun);
+    dinoJumpButton.addEventListener("click", jumpDino);
+    dinoResetButton.addEventListener("click", startDinoRun);
+    dinoPlayButton.addEventListener("click", () => {
+      document.querySelector("#dino-dash").scrollIntoView({
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+        block: "start",
+      });
+      window.setTimeout(() => dinoStartButton.focus({ preventScroll: true }), 350);
+    });
+    resetDinoRun();
+  }
 })();
