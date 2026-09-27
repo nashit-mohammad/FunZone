@@ -11,7 +11,7 @@ This workspace uses four role prompts that can be run as separate Cline tasks or
 
 ## One work item, one durable folder
 
-Create .agents/handoffs/<work-id>/ for each request. Use a short slug plus date, for example 2026-09-26-login-validation/. Copy the templates from .agents/templates/ into that folder as each role begins. The handoff folder is the source of truth; never overwrite an earlier role's file. Update status.md whenever ownership changes.
+Create .agents/handoffs/<timestamp>-<short-slug>/ for each request. Use the local date and time through minutes only, in `YYYY-MM-DD-HH-mm` format, followed by a short slug; for example `2026-09-26-14-35-login-validation/`. Do not include seconds or finer time units. Copy the templates from .agents/templates/ into that folder as each role begins. The handoff folder is the source of truth; never overwrite an earlier role's file. Update status.md whenever ownership changes.
 
 Expected artifacts:
 
@@ -36,7 +36,7 @@ Every handoff must name the receiving role, link the artifact(s), summarize what
 
 ## Starting a role
 
-In a new Cline task, give the agent the relevant role file and work-item path, for example: “Act as the Analyser. Follow .agents/roles/analyser.md; work item is .agents/handoffs/2026-09-26-login-validation/. Read the request and current status, then produce your handoff.” The role must read the previous artifacts before acting and write its own artifact before handing off.
+In a new Cline task, give the agent the relevant role file and work-item path, for example: “Act as the Analyser. Follow .agents/roles/analyser.md; work item is .agents/handoffs/2026-09-26-14-35-login-validation/. Read the request and current status, then produce your handoff.” The role must read the previous artifacts before acting and write its own artifact before handing off.
 
 ## Safety and quality
 
