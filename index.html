@@ -78,11 +78,11 @@
             <div class="card-info"><div><h3>Bubble Pop</h3><p>Pop a path through a rainbow of bubbles.</p></div></div>
             <div class="coming-label"><span></span> ADDING THE FUN</div>
           </article>
-          <article class="game-card coming-card">
-            <div class="card-topline"><span class="game-number">06 / COMING SOON</span><span class="lock-icon" aria-hidden="true">✳</span></div>
+          <article class="game-card featured-card featured-dino-card">
+            <div class="card-topline"><span class="game-number">06 / NOW PLAYING</span><span class="card-arrow" aria-hidden="true">↗</span></div>
             <div class="game-art dino-art" aria-hidden="true"><span>🦖</span><i>✦</i><i>✦</i></div>
-            <div class="card-info"><div><h3>Dino Dash</h3><p>Help a tiny dino leap over trouble.</p></div></div>
-            <div class="coming-label"><span></span> ADDING THE FUN</div>
+            <div class="card-info"><div><h3>Dino Dash</h3><p>Jump over cacti. Keep your run going!</p></div><span class="player-tag">1 PLAYER</span></div>
+            <button class="play-button" id="play-dino-dash" type="button">Play this game <span aria-hidden="true">→</span></button>
           </article>
           <article class="game-card coming-card">
             <div class="card-topline"><span class="game-number">07 / COMING SOON</span><span class="lock-icon" aria-hidden="true">✳</span></div>
@@ -177,6 +177,40 @@
               <button type="button" data-scout-direction="down" aria-label="Move down">↓</button>
               <button type="button" data-scout-direction="right" aria-label="Move right">→</button>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="dino-section" id="dino-dash" aria-labelledby="dino-title">
+        <div class="play-heading">
+          <div><p class="eyebrow section-eyebrow">A LITTLE PREHISTORIC SPRINT</p><h2 id="dino-title">Dino Dash<span class="heading-period">.</span></h2></div>
+          <p class="section-aside">Jump every cactus and see how long you can last.</p>
+        </div>
+        <div class="dino-panel">
+          <div class="dino-game-info">
+            <span class="round-label"><span class="pulse-dot" aria-hidden="true"></span> READY TO RUN?</span>
+            <h3>Little legs.<br>Big dash.</h3>
+            <p>Start your run, then jump over each cactus. Clear one to score a point. The pace gets quicker as you go.</p>
+            <div class="dino-stats" aria-label="Run score">
+              <div><span>CACTI CLEARED</span><strong id="dino-score">0</strong></div>
+              <div><span>BEST THIS VISIT</span><strong id="dino-best">0</strong></div>
+            </div>
+            <div class="dino-buttons">
+              <button class="reset-button" id="dino-start" type="button">Start run</button>
+              <button class="reset-button dino-jump-button" id="dino-jump" type="button" disabled>Jump</button>
+              <button class="dino-restart-button" id="dino-reset" type="button">Restart</button>
+            </div>
+          </div>
+          <div class="dino-board-wrap">
+            <div class="board-status dino-status" id="dino-status" role="status" aria-live="polite">Press Start run when you're ready.</div>
+            <div class="dino-stage" id="dino-stage" role="group" tabindex="0" aria-label="Dino Dash game area. Press Space or Arrow Up to jump over cacti." aria-describedby="dino-controls-hint">
+              <div class="dino-cloud dino-cloud-one" aria-hidden="true"></div>
+              <div class="dino-cloud dino-cloud-two" aria-hidden="true"></div>
+              <span class="dino-runner" id="dino-runner" aria-hidden="true">🦖</span>
+              <span class="dino-obstacle" id="dino-obstacle" aria-hidden="true">🌵</span>
+              <div class="dino-ground" aria-hidden="true"></div>
+            </div>
+            <p class="dino-controls-hint" id="dino-controls-hint">Focus the game area and press Space or ↑ to jump, or use the Jump button.</p>
           </div>
         </div>
       </section>
