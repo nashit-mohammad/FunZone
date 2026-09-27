@@ -1,6 +1,6 @@
 # Daily game proposals
 
-The `Daily FunZone Game` workflow asks Codex to add one distinct, playable game every day at 9:00 AM America/Toronto. It runs on GitHub-hosted infrastructure while the local PC may be off.
+The `Daily FunZone Game` workflow asks Codex to add one distinct, playable game every day at 2:37 PM America/Toronto. It runs on GitHub-hosted infrastructure while the local PC may be off.
 
 Every run checks out `main` and creates a unique `codex/daily-game-<run-id>` branch with `main` as the PR base. Open daily-game PR titles are provided to Codex to avoid duplicate proposals. PRs are for review only; there is no auto-merge.
 
