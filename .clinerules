@@ -1,0 +1,36 @@
+# RTK - Rust Token Killer (Cline)
+
+**Usage**: Token-optimized CLI proxy for shell commands.
+
+## Rule
+
+Always prefix shell commands with `rtk` to minimize token consumption.
+
+Examples:
+
+```bash
+rtk git status
+rtk cargo test
+rtk ls src/
+rtk grep "pattern" src/
+rtk find "*.rs" .
+rtk docker ps
+rtk gh pr list
+```
+
+## Multi-agent workflow
+
+For work that uses the four role agents, follow `.agents/README.md`. Read the role prompt for your current role and use `.agents/handoffs/` as the durable source of truth between separate tasks or sessions. The Orchestrator owns the overall request and handoffs; do not skip a required handoff or mark work complete without the Tester report.
+
+## Meta Commands
+
+```bash
+rtk gain              # Show token savings
+rtk gain --history    # Command history with savings
+rtk discover          # Find missed RTK opportunities
+rtk proxy <cmd>       # Run raw (no filtering, for debugging)
+```
+
+## Why
+
+RTK filters and compresses command output before it reaches the LLM context, cutting up to 90% of the bash output on common operations. Always use `rtk <cmd>` instead of raw commands.

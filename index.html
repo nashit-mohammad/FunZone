@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#101719">
+    <meta name="description" content="Take a little break at Fun Zone. Pick a game and play.">
+    <title>Fun Zone — Your next little break</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Fun Zone home">
+        <span class="brand-mark" aria-hidden="true">F<span>!</span></span>
+        <span>fun<span class="brand-light">zone</span></span>
+      </a>
+      <a class="topbar-link" href="#games">Explore games <span aria-hidden="true">↘</span></a>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="pulse-dot" aria-hidden="true"></span> YOUR BREAK STARTS HERE</p>
+          <h1 id="hero-title">A little play<br>goes a <span class="highlight">long way.</span></h1>
+          <p class="hero-description">Shake off the serious stuff. Pick a game, challenge a friend, and make a moment out of it.</p>
+          <a class="primary-button" href="#games">Find your game <span aria-hidden="true">↓</span></a>
+          <div class="hero-note"><span aria-hidden="true">✳</span> Free to play. Just here for fun.</div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div>
+          <span class="float-shape shape-star">✳</span><span class="float-shape shape-spark">✦</span>
+          <div class="tile tile-o">O</div><div class="tile tile-x">X</div><div class="tile tile-dot">·</div>
+          <div class="art-label">YOUR MOVE<br><span>GOOD VIBES ONLY</span></div>
+        </div>
+        <div class="hero-index" aria-hidden="true">01 <span></span> LET'S PLAY</div>
+      </section>
+
+      <section class="games-section" id="games" aria-labelledby="games-title">
+        <div class="section-heading">
+          <div><p class="eyebrow section-eyebrow">THE ARCADE</p><h2 id="games-title">Pick your kind of fun<span class="heading-period">.</span></h2></div>
+          <p class="section-aside">Small games. Big main-character energy.</p>
+        </div>
+        <div class="game-grid">
+          <article class="game-card featured-card">
+            <div class="card-topline"><span class="game-number">01 / NOW PLAYING</span><span class="card-arrow" aria-hidden="true">↗</span></div>
+            <div class="game-art tic-art" aria-hidden="true">
+              <div class="mini-board"><span class="mini-x">×</span><span></span><span class="mini-o">○</span><span></span><span class="mini-x">×</span><span></span><span class="mini-o">○</span><span></span><span class="mini-x">×</span></div>
+              <span class="art-spark">✳</span>
+            </div>
+            <div class="card-info"><div><h3>Tic Tac Toe</h3><p>The tiny game with big rival energy.</p></div><span class="player-tag">2 PLAYERS</span></div>
+            <button class="play-button" id="play-tic-tac-toe" type="button">Play this game <span aria-hidden="true">→</span></button>
+          </article>
+          <article class="game-card coming-card">
+            <div class="card-topline"><span class="game-number">02 / COMING SOON</span><span class="lock-icon" aria-hidden="true">✳</span></div>
+            <div class="game-art memory-art" aria-hidden="true"><span class="memory-tile memory-a">?</span><span class="memory-tile memory-b">?</span><span class="memory-tile memory-c">?</span><span class="memory-tile memory-d">?</span><span class="memory-orbit"></span></div>
+            <div class="card-info"><div><h3>Memory Match</h3><p>How good is that brain of yours?</p></div></div>
+            <div class="coming-label"><span></span> ADDING THE FUN</div>
+          </article>
+          <article class="game-card coming-card">
+            <div class="card-topline"><span class="game-number">03 / COMING SOON</span><span class="lock-icon" aria-hidden="true">✳</span></div>
+            <div class="game-art reaction-art"><div class="reaction-ring"><span>!</span></div><span class="reaction-spark spark-a">✦</span><span class="reaction-spark spark-b">✳</span></div>
+            <div class="card-info"><div><h3>Quick Draw</h3><p>Fast fingers. Faster bragging rights.</p></div></div>
+            <div class="coming-label"><span></span> ADDING THE FUN</div>
+          </article>
+        </div>
+      </section>
+
+      <section class="play-section" id="tic-tac-toe" aria-labelledby="play-title">
+        <div class="play-heading">
+          <div><p class="eyebrow section-eyebrow">TAKE YOUR SHOT</p><h2 id="play-title">Tic Tac Toe<span class="heading-period">.</span></h2></div>
+          <p class="section-aside">No downloads. No drama. Just you versus them.</p>
+        </div>
+        <div class="game-panel">
+          <div class="game-intro">
+            <span class="round-label"><span class="pulse-dot" aria-hidden="true"></span> THE CLASSIC</span>
+            <h3>Ready when<br>you are.</h3>
+            <p>Three in a row takes the round. Play with a friend, pass the screen, and settle it right here.</p>
+            <div class="scoreboard" aria-label="Score">
+              <div class="score-item"><span class="score-symbol score-x" aria-hidden="true">×</span><label class="score-name" for="player-x-name">PLAYER X</label><input class="player-name-input" id="player-x-name" type="text" value="Player X" maxlength="18" autocomplete="off" aria-label="Player X name"><strong id="score-x">0</strong></div>
+              <div class="score-divider"></div>
+              <div class="score-item"><span class="score-symbol score-o" aria-hidden="true">○</span><label class="score-name" for="player-o-name">PLAYER O</label><input class="player-name-input" id="player-o-name" type="text" value="Player O" maxlength="18" autocomplete="off" aria-label="Player O name"><strong id="score-o">0</strong></div>
+            </div>
+            <button class="reset-button" id="reset-game" type="button"><span aria-hidden="true">↻</span> New round</button>
+          </div>
+          <div class="board-wrap">
+            <div class="board-status" id="game-status" role="status" aria-live="polite"><span class="status-player x-turn" aria-hidden="true">×</span> Player X's turn</div>
+            <div class="board" role="group" aria-label="Tic Tac Toe board">
+              <button class="cell" type="button" data-cell="0" aria-label="Row 1, column 1, empty"></button><button class="cell" type="button" data-cell="1" aria-label="Row 1, column 2, empty"></button><button class="cell" type="button" data-cell="2" aria-label="Row 1, column 3, empty"></button>
+              <button class="cell" type="button" data-cell="3" aria-label="Row 2, column 1, empty"></button><button class="cell" type="button" data-cell="4" aria-label="Row 2, column 2, empty"></button><button class="cell" type="button" data-cell="5" aria-label="Row 2, column 3, empty"></button>
+              <button class="cell" type="button" data-cell="6" aria-label="Row 3, column 1, empty"></button><button class="cell" type="button" data-cell="7" aria-label="Row 3, column 2, empty"></button><button class="cell" type="button" data-cell="8" aria-label="Row 3, column 3, empty"></button>
+            </div>
+            <p class="board-hint">PICK AN EMPTY SQUARE TO PLAY</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="closing-note" aria-label="Fun Zone message"><span aria-hidden="true">✳</span><p>Made for your five-minute break.<br><strong>And maybe the next five, too.</strong></p><span aria-hidden="true">✳</span></section>
+    </main>
+    <footer class="footer"><a class="brand footer-brand" href="#" aria-label="Fun Zone home"><span class="brand-mark" aria-hidden="true">F<span>!</span></span><span>fun<span class="brand-light">zone</span></span></a><span>GO ON. TAKE THAT BREAK.</span><span>© FUN ZONE 2026</span></footer>
+  </body>
+</html>
