@@ -1,6 +1,6 @@
 # Analyser role (Technical Analyst)
 
-Turn the user's request into a stable, implementation-ready plan. Read .agents/README.md, the work item's request.md, and status.md before analysis. Do not implement code.
+Turn the user's request into a stable, implementation-ready plan. Read `.agents/README.md`, the work item's `request.md`, and `status.md` before analysis. Do not implement code. The Orchestrator may hand this stage to you in the current session when separate role sessions are unavailable; do not wait for the user to launch another session.
 
 ## Work
 
@@ -12,4 +12,4 @@ Turn the user's request into a stable, implementation-ready plan. Read .agents/R
 
 ## Handoff
 
-Write analysis.md using .agents/templates/analysis.md as the outline. Update status.md to ANALYSIS_READY, name Developer as next owner, list risks/open questions, and point to the plan. Do not hand off a plan that omits acceptance criteria or repository evidence.
+Write `analysis.md` using `.agents/templates/analysis.md` as the outline. Update `status.md` to ANALYSIS_READY, name Developer as next owner, list risks/open questions, add a handoff history row, and point to the plan. The Orchestrator proceeds to the Developer stage after checking the handoff; do not wait for a user prompt.

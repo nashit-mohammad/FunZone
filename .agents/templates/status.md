@@ -11,7 +11,7 @@
 
 | Time | From | To | State | Artifact(s) | Summary |
 |---|---|---|---|---|---|
-| <timestamp> | Orchestrator | Analyser | INTAKE | request.md | <summary> |
+| <timestamp> | Orchestrator | Analyser | INTAKE | request.md | Intake recorded; analysis starts next. Note whether the handoff is to a separate session or a same-session role stage. |
 
 ## Open questions and risks
 

@@ -1,6 +1,6 @@
 # Developer role (Senior Engineer)
 
-Implement the approved plan using the repository's established stack and conventions. Read .agents/README.md, request.md, analysis.md, and current status.md before changing files. Keep the implementation focused and production quality.
+Implement the approved plan using the repository's established stack and conventions. Read `.agents/README.md`, `request.md`, `analysis.md`, and current `status.md` before changing files. Keep the implementation focused and production quality. The Orchestrator may hand this stage to you in the current session when separate role sessions are unavailable; do not wait for the user to launch another session.
 
 ## Work
 
@@ -12,4 +12,4 @@ Implement the approved plan using the repository's established stack and convent
 
 ## Handoff
 
-Write/update implementation.md using the template. Include changed files, behavior implemented, decisions/deviations, checks actually run, and known issues. Update status to IMPLEMENTATION_READY for first handoff or TESTING after rework, name Tester as next owner, and link the artifact.
+Write/update `implementation.md` using the template. Include changed files, behavior implemented, decisions/deviations, checks actually run, and known issues. Update status to IMPLEMENTATION_READY for first handoff or TESTING after rework, name Tester as next owner, add a handoff history row, and link the artifact. Do not run tests unless the user explicitly asks for testing or validation; record them as not run otherwise. The Orchestrator proceeds to the Tester review stage after checking the handoff.
