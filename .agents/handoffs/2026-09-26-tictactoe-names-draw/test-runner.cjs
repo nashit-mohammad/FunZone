@@ -19,6 +19,7 @@ class FakeElement {
     };
     this.listeners = {};
     this.attributes = {};
+    this.style = { values: {}, setProperty: (name, value) => { this.style.values[name] = value; } };
     this.textContent = "";
     this.value = "";
     this.disabled = false;
@@ -41,16 +42,20 @@ const nameO = new FakeElement();
 const board = new FakeElement();
 const boardWrap = new FakeElement();
 const section = new FakeElement();
+const tileSize = new FakeElement();
+const tileSizeValue = new FakeElement();
 status.innerHTML = '<span>×</span> Player X\'s turn';
 scoreX.textContent = "0";
 scoreO.textContent = "0";
 nameX.value = "Player X";
 nameO.value = "Player O";
+tileSize.value = "96";
 section.scrollIntoView = () => {};
 const nodes = {
   "#game-status": status, "#reset-game": reset, "#play-tic-tac-toe": play,
   "#score-x": scoreX, "#score-o": scoreO, "#player-x-name": nameX,
   "#player-o-name": nameO, ".board": board, ".board-wrap": boardWrap,
+  "#tile-size": tileSize, "#tile-size-value": tileSizeValue,
   "#tic-tac-toe": section,
 };
 const timers = new Map();
@@ -84,6 +89,10 @@ function fireDrawTimer() {
 }
 
 assert.match(statusText(), /Player X's turn/);
+tileSize.value = "120";
+tileSize.listeners.input();
+assert.equal(tileSizeValue.textContent, "120 px");
+assert.equal(board.style.values["--requested-tile-size"], "120px");
 nameX.value = "<A & B>";
 nameX.listeners.input();
 assert.match(status.innerHTML, /&lt;A &amp; B&gt;/);
@@ -143,5 +152,6 @@ assert.match(html, /id="player-o-name"/);
 assert.match(html, /aria-live="polite"/);
 assert.match(css, /\.cell\.draw-cell/);
 assert.match(css, /\.draw-status/);
+assert.match(css, /grid-template-columns: repeat\(3, var\(--cell-size\)\)/);
 
 console.log("PASS: player names, safe name rendering, win score, draw highlight, 10-second timer, auto reset, and manual reset");

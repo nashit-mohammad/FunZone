@@ -87,6 +87,10 @@
             <button class="reset-button" id="reset-game" type="button"><span aria-hidden="true">↻</span> New round</button>
           </div>
           <div class="board-wrap">
+            <div class="tile-size-control">
+              <label for="tile-size">Tile size <output id="tile-size-value" for="tile-size">96 px</output></label>
+              <input id="tile-size" type="range" min="56" max="120" step="8" value="96" aria-label="Tic Tac Toe tile size">
+            </div>
             <div class="board-status" id="game-status" role="status" aria-live="polite"><span class="status-player x-turn" aria-hidden="true">×</span> Player X's turn</div>
             <div class="board" role="group" aria-label="Tic Tac Toe board">
               <button class="cell" type="button" data-cell="0" aria-label="Row 1, column 1, empty"></button><button class="cell" type="button" data-cell="1" aria-label="Row 1, column 2, empty"></button><button class="cell" type="button" data-cell="2" aria-label="Row 1, column 3, empty"></button>

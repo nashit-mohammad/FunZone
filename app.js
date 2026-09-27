@@ -9,6 +9,8 @@
   const playerOInput = document.querySelector("#player-o-name");
   const boardNode = document.querySelector(".board");
   const boardWrap = document.querySelector(".board-wrap");
+  const tileSizeInput = document.querySelector("#tile-size");
+  const tileSizeValue = document.querySelector("#tile-size-value");
   const winningLines = [
     [0, 1, 2], [3, 4, 5], [6, 7, 8],
     [0, 3, 6], [1, 4, 7], [2, 5, 8],
@@ -19,6 +21,8 @@
   let roundOver = false;
   let roundOutcome = "";
   let drawTimer = null;
+  let resetTimer = null;
+  let resetInProgress = false;
   const scores = { X: 0, O: 0 };
 
   function getPlayerName(player) {
@@ -38,7 +42,9 @@
   function setStatus() {
     let message;
     let player = currentPlayer;
-    if (roundOutcome === "draw") {
+    if (resetInProgress) {
+      message = "Resetting the board…";
+    } else if (roundOutcome === "draw") {
       message = "It's a draw! New round starts in 10 seconds.";
     } else if (roundOutcome === "X" || roundOutcome === "O") {
       player = roundOutcome;
@@ -46,10 +52,17 @@
     } else {
       message = escapeHTML(getPlayerName(player)) + "'s turn";
     }
-    const symbol = roundOutcome === "draw" ? "!" : (player === "X" ? "×" : "○");
-    const className = roundOutcome === "draw" ? "draw-status" : (player === "X" ? "x-turn" : "o-turn");
+    const symbol = resetInProgress ? "↻" : (roundOutcome === "draw" ? "!" : (player === "X" ? "×" : "○"));
+    const className = resetInProgress ? "reset-status" : (roundOutcome === "draw" ? "draw-status" : (player === "X" ? "x-turn" : "o-turn"));
     status.innerHTML = '<span class="status-player ' + className + '" aria-hidden="true">' + symbol + '</span> ' + message;
     status.classList.toggle("winner-status", roundOutcome === "X" || roundOutcome === "O");
+  }
+
+  function updateTileSize() {
+    const size = Number(tileSizeInput.value);
+    tileSizeValue.value = size + " px";
+    tileSizeValue.textContent = size + " px";
+    boardNode.style.setProperty("--requested-tile-size", size + "px");
   }
 
   function finishRound(winner, line) {
@@ -106,27 +119,44 @@
       window.clearTimeout(drawTimer);
       drawTimer = null;
     }
-    board = Array(9).fill("");
-    currentPlayer = "X";
-    roundOver = false;
+    if (resetInProgress) return;
+    resetInProgress = true;
+    roundOver = true;
     roundOutcome = "";
     boardNode.classList.remove("draw-board");
     boardNode.classList.remove("winner-board");
     boardWrap.classList.remove("draw-board-wrap");
     status.classList.remove("winner-status");
-    cells.forEach((cell, index) => {
-      cell.textContent = "";
-      cell.disabled = false;
-      cell.classList.remove("played-x", "played-o", "winning-cell", "losing-cell", "draw-cell");
-      cell.setAttribute("aria-label", 'Row ' + (Math.floor(index / 3) + 1) + ', column ' + ((index % 3) + 1) + ', empty');
+    cells.forEach((cell) => {
+      cell.disabled = true;
+      cell.classList.remove("winning-cell", "losing-cell", "draw-cell");
+      cell.classList.add("resetting-cell");
     });
     setStatus();
+    const delay = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 560;
+    resetTimer = window.setTimeout(() => {
+      resetTimer = null;
+      board = Array(9).fill("");
+      currentPlayer = "X";
+      roundOver = false;
+      roundOutcome = "";
+      resetInProgress = false;
+      cells.forEach((cell, index) => {
+        cell.textContent = "";
+        cell.disabled = false;
+        cell.classList.remove("played-x", "played-o", "winning-cell", "losing-cell", "draw-cell", "resetting-cell");
+        cell.setAttribute("aria-label", 'Row ' + (Math.floor(index / 3) + 1) + ', column ' + ((index % 3) + 1) + ', empty');
+      });
+      setStatus();
+    }, delay);
   }
 
   cells.forEach((cell) => cell.addEventListener("click", () => play(Number(cell.dataset.cell))));
   resetButton.addEventListener("click", resetRound);
   playerXInput.addEventListener("input", setStatus);
   playerOInput.addEventListener("input", setStatus);
+  tileSizeInput.addEventListener("input", updateTileSize);
+  updateTileSize();
   playButton.addEventListener("click", () => {
     document.querySelector("#tic-tac-toe").scrollIntoView({ behavior: "smooth", block: "start" });
     window.setTimeout(() => cells[0].focus({ preventScroll: true }), 350);
