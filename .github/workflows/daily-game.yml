@@ -2,8 +2,7 @@ name: Daily FunZone Game
 
 on:
   schedule:
-    - cron: "0 9 * * *"
-      timezone: America/Toronto
+     - cron: "18 16 * * *" 
   workflow_dispatch:
 
 permissions:
