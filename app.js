@@ -161,4 +161,114 @@
     document.querySelector("#tic-tac-toe").scrollIntoView({ behavior: "smooth", block: "start" });
     window.setTimeout(() => cells[0].focus({ preventScroll: true }), 350);
   });
+
+  const memoryBoard = document.querySelector("#memory-board");
+  const memoryPlayButton = document.querySelector("#play-memory-match");
+  const memoryResetButton = document.querySelector("#memory-reset");
+  if (memoryBoard && memoryPlayButton && memoryResetButton) {
+    const memoryStatus = document.querySelector("#memory-status");
+    const movesNode = document.querySelector("#memory-moves");
+    const timeNode = document.querySelector("#memory-time");
+    const pairsNode = document.querySelector("#memory-pairs");
+    const symbols = ["🍋", "🌼", "🍓", "🐸", "🌙", "🐝", "🍄", "🦋"];
+    let firstCard = null;
+    let locked = false;
+    let moves = 0;
+    let matchedPairs = 0;
+    let startedAt = 0;
+    let timerId = null;
+
+    function formatTime(seconds) {
+      return String(Math.floor(seconds / 60)).padStart(2, "0") + ":" + String(seconds % 60).padStart(2, "0");
+    }
+
+    function updateTimer() {
+      timeNode.textContent = formatTime(Math.floor((Date.now() - startedAt) / 1000));
+    }
+
+    function startTimer() {
+      if (timerId !== null) return;
+      startedAt = Date.now();
+      timerId = window.setInterval(updateTimer, 1000);
+    }
+
+    function finishGame() {
+      window.clearInterval(timerId);
+      timerId = null;
+      memoryStatus.textContent = "You matched every pair in " + moves + (moves === 1 ? " move" : " moves") + " and " + timeNode.textContent + ". Nice memory!";
+    }
+
+    function revealCard(card) {
+      if (locked || card === firstCard || card.disabled) return;
+      startTimer();
+      card.classList.add("is-revealed");
+      card.setAttribute("aria-label", "Revealed " + card.dataset.symbol);
+      card.querySelector("span").textContent = card.dataset.symbol;
+      if (!firstCard) {
+        firstCard = card;
+        memoryStatus.textContent = "Pick one more card.";
+        return;
+      }
+
+      moves += 1;
+      movesNode.textContent = moves;
+      if (firstCard.dataset.symbol === card.dataset.symbol) {
+        firstCard.disabled = true;
+        card.disabled = true;
+        firstCard.classList.add("is-matched");
+        card.classList.add("is-matched");
+        firstCard.setAttribute("aria-label", "Matched " + card.dataset.symbol);
+        card.setAttribute("aria-label", "Matched " + card.dataset.symbol);
+        firstCard = null;
+        matchedPairs += 1;
+        pairsNode.textContent = matchedPairs + " / 8";
+        if (matchedPairs === symbols.length) finishGame();
+        else memoryStatus.textContent = "That's a match! Find another pair.";
+      } else {
+        locked = true;
+        const previousCard = firstCard;
+        firstCard = null;
+        memoryStatus.textContent = "No match. Try another pair.";
+        window.setTimeout(() => {
+          [previousCard, card].forEach((item) => {
+            item.classList.remove("is-revealed");
+            item.querySelector("span").textContent = "?";
+            item.setAttribute("aria-label", "Hidden card");
+          });
+          locked = false;
+        }, 850);
+      }
+    }
+
+    function startMemoryGame() {
+      window.clearInterval(timerId);
+      timerId = null;
+      firstCard = null;
+      locked = false;
+      moves = 0;
+      matchedPairs = 0;
+      movesNode.textContent = "0";
+      timeNode.textContent = "00:00";
+      pairsNode.textContent = "0 / 8";
+      memoryStatus.textContent = "Choose any card to start.";
+      const deck = [...symbols, ...symbols].sort(() => Math.random() - 0.5);
+      memoryBoard.replaceChildren(...deck.map((symbol) => {
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = "memory-card";
+        card.dataset.symbol = symbol;
+        card.setAttribute("aria-label", "Hidden card");
+        card.innerHTML = "<span aria-hidden=\"true\">?</span>";
+        card.addEventListener("click", () => revealCard(card));
+        return card;
+      }));
+    }
+
+    memoryResetButton.addEventListener("click", startMemoryGame);
+    memoryPlayButton.addEventListener("click", () => {
+      document.querySelector("#memory-match").scrollIntoView({ behavior: "smooth", block: "start" });
+      window.setTimeout(() => memoryBoard.querySelector(".memory-card")?.focus({ preventScroll: true }), 350);
+    });
+    startMemoryGame();
+  }
 })();

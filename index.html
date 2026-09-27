@@ -54,11 +54,11 @@
             <div class="card-info"><div><h3>Tic Tac Toe</h3><p>The tiny game with big rival energy.</p></div><span class="player-tag">2 PLAYERS</span></div>
             <button class="play-button" id="play-tic-tac-toe" type="button">Play this game <span aria-hidden="true">→</span></button>
           </article>
-          <article class="game-card coming-card">
-            <div class="card-topline"><span class="game-number">02 / COMING SOON</span><span class="lock-icon" aria-hidden="true">✳</span></div>
+          <article class="game-card featured-card">
+            <div class="card-topline"><span class="game-number">02 / NOW PLAYING</span><span class="card-arrow" aria-hidden="true">↗</span></div>
             <div class="game-art memory-art" aria-hidden="true"><span class="memory-tile memory-a">?</span><span class="memory-tile memory-b">?</span><span class="memory-tile memory-c">?</span><span class="memory-tile memory-d">?</span><span class="memory-orbit"></span></div>
-            <div class="card-info"><div><h3>Memory Match</h3><p>How good is that brain of yours?</p></div></div>
-            <div class="coming-label"><span></span> ADDING THE FUN</div>
+            <div class="card-info"><div><h3>Memory Match</h3><p>Can you remember them all?</p></div><span class="player-tag">1 PLAYER</span></div>
+            <button class="play-button" id="play-memory-match" type="button">Play this game <span aria-hidden="true">→</span></button>
           </article>
           <article class="game-card coming-card">
             <div class="card-topline"><span class="game-number">03 / COMING SOON</span><span class="lock-icon" aria-hidden="true">✳</span></div>
@@ -98,6 +98,30 @@
               <button class="cell" type="button" data-cell="6" aria-label="Row 3, column 1, empty"></button><button class="cell" type="button" data-cell="7" aria-label="Row 3, column 2, empty"></button><button class="cell" type="button" data-cell="8" aria-label="Row 3, column 3, empty"></button>
             </div>
             <p class="board-hint">PICK AN EMPTY SQUARE TO PLAY</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="memory-section" id="memory-match" aria-labelledby="memory-title">
+        <div class="play-heading">
+          <div><p class="eyebrow section-eyebrow">FLIP, FOCUS, MATCH</p><h2 id="memory-title">Memory Match<span class="heading-period">.</span></h2></div>
+          <p class="section-aside">Can you remember them all?</p>
+        </div>
+        <div class="memory-panel">
+          <div class="memory-game-info">
+            <span class="round-label"><span class="pulse-dot" aria-hidden="true"></span> READY TO PLAY?</span>
+            <h3>How good is<br>that brain of yours?</h3>
+            <p>Find all eight pairs. Flip two cards at a time and see how few moves it takes.</p>
+            <div class="memory-stats" aria-label="Game stats">
+              <div><span>MOVES</span><strong id="memory-moves">0</strong></div>
+              <div><span>TIME</span><strong id="memory-time">00:00</strong></div>
+              <div><span>PAIRS</span><strong id="memory-pairs">0 / 8</strong></div>
+            </div>
+            <button class="reset-button" id="memory-reset" type="button"><span aria-hidden="true">↻</span> Shuffle and restart</button>
+          </div>
+          <div class="memory-board-wrap">
+            <div class="board-status" id="memory-status" role="status" aria-live="polite">Choose any card to start.</div>
+            <div class="memory-board" id="memory-board" role="group" aria-label="Memory Match cards"></div>
           </div>
         </div>
       </section>
