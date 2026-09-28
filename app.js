@@ -563,4 +563,70 @@
     });
     resetDinoRun();
   }
+
+  const quickPlayButton = document.querySelector("#play-quick-draw");
+  const quickStartButton = document.querySelector("#quick-start");
+  const quickTarget = document.querySelector("#quick-target");
+  if (quickPlayButton && quickStartButton && quickTarget) {
+    const quickStatus = document.querySelector("#quick-status");
+    const quickLabel = document.querySelector("#quick-target-label");
+    const quickBestNode = document.querySelector("#quick-best");
+    let quickState = "idle";
+    let signalTimer = null;
+    let signalTime = 0;
+    let bestReaction = Infinity;
+
+    function startQuickDraw() {
+      window.clearTimeout(signalTimer);
+      quickState = "waiting";
+      quickTarget.classList.remove("is-ready", "is-early");
+      quickTarget.setAttribute("aria-label", "Quick Draw target. Wait for it to turn green.");
+      quickLabel.textContent = "WAIT…";
+      quickStatus.textContent = "Keep your finger ready, but wait for green.";
+      quickStartButton.disabled = true;
+      quickTarget.focus({ preventScroll: true });
+      signalTimer = window.setTimeout(() => {
+        if (quickState !== "waiting") return;
+        quickState = "ready";
+        signalTime = performance.now();
+        quickTarget.classList.add("is-ready");
+        quickTarget.setAttribute("aria-label", "Quick Draw target. Draw now.");
+        quickLabel.textContent = "DRAW!";
+        quickStatus.textContent = "Now! Tap the target as fast as you can.";
+      }, 1200 + Math.random() * 2300);
+    }
+
+    quickTarget.addEventListener("click", () => {
+      if (quickState === "waiting") {
+        window.clearTimeout(signalTimer);
+        quickState = "early";
+        quickTarget.classList.add("is-early");
+        quickTarget.setAttribute("aria-label", "Quick Draw target. Too soon. Start another round.");
+        quickLabel.textContent = "TOO SOON";
+        quickStatus.textContent = "You drew too early! Take a breath and try again.";
+        quickStartButton.disabled = false;
+        quickStartButton.textContent = "Try again";
+      } else if (quickState === "ready") {
+        const reaction = Math.round(performance.now() - signalTime);
+        quickState = "result";
+        quickTarget.classList.remove("is-ready");
+        quickTarget.setAttribute("aria-label", "Quick Draw target. Your reaction time was " + reaction + " milliseconds.");
+        quickLabel.textContent = reaction + " ms";
+        quickStatus.textContent = "Draw time: " + reaction + " milliseconds. Can you beat it?";
+        bestReaction = Math.min(bestReaction, reaction);
+        quickBestNode.textContent = bestReaction + " ms";
+        quickStartButton.disabled = false;
+        quickStartButton.textContent = "Play again";
+      }
+    });
+
+    quickStartButton.addEventListener("click", startQuickDraw);
+    quickPlayButton.addEventListener("click", () => {
+      document.querySelector("#quick-draw").scrollIntoView({
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+        block: "start",
+      });
+      window.setTimeout(() => quickStartButton.focus({ preventScroll: true }), 350);
+    });
+  }
 })();
