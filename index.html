@@ -66,24 +66,24 @@
             <div class="card-info"><div><h3>Star Scout</h3><p>Collect stars and find your rocket.</p></div><span class="player-tag">1 PLAYER</span></div>
             <button class="play-button" id="play-star-scout" type="button">Play this game <span aria-hidden="true">→</span></button>
           </article>
-          <article class="game-card coming-card">
-            <div class="card-topline"><span class="game-number">04 / COMING SOON</span><span class="lock-icon" aria-hidden="true">✳</span></div>
-            <div class="game-art reaction-art"><div class="reaction-ring"><span>!</span></div><span class="reaction-spark spark-a">✦</span><span class="reaction-spark spark-b">✳</span></div>
-            <div class="card-info"><div><h3>Quick Draw</h3><p>Fast fingers. Faster bragging rights.</p></div></div>
-            <div class="coming-label"><span></span> ADDING THE FUN</div>
-          </article>
-          <article class="game-card coming-card">
-            <div class="card-topline"><span class="game-number">05 / COMING SOON</span><span class="lock-icon" aria-hidden="true">✳</span></div>
-            <div class="game-art bubble-art" aria-hidden="true"><span class="bubble bubble-one"></span><span class="bubble bubble-two"></span><span class="bubble bubble-three"></span><span class="bubble bubble-four"></span></div>
-            <div class="card-info"><div><h3>Bubble Pop</h3><p>Pop a path through a rainbow of bubbles.</p></div></div>
-            <div class="coming-label"><span></span> ADDING THE FUN</div>
-          </article>
-          <article class="game-card featured-card featured-dino-card">
-            <div class="card-topline"><span class="game-number">06 / NOW PLAYING</span><span class="card-arrow" aria-hidden="true">↗</span></div>
+          <article class="game-card featured-card featured-dino-card"><div class="card-topline"><span class="game-number">04 / NOW PLAYING</span><span class="card-arrow" aria-hidden="true">↗</span></div>
             <div class="game-art dino-art" aria-hidden="true"><span>🦖</span><i>✦</i><i>✦</i></div>
             <div class="card-info"><div><h3>Dino Dash</h3><p>Jump over cacti. Keep your run going!</p></div><span class="player-tag">1 PLAYER</span></div>
             <button class="play-button" id="play-dino-dash" type="button">Play this game <span aria-hidden="true">→</span></button>
           </article>
+          <article class="game-card featured-card featured-quick-card">
+            <div class="card-topline"><span class="game-number">05 / NOW PLAYING</span><span class="card-arrow" aria-hidden="true">✳</span></div>
+            <div class="game-art reaction-art"><div class="reaction-ring"><span>!</span></div><span class="reaction-spark spark-a">✦</span><span class="reaction-spark spark-b">✳</span></div>
+            <div class="card-info"><div><h3>Quick Draw</h3><p>Fast fingers. Faster bragging rights.</p></div><span class="player-tag">1 PLAYER</span></div>
+            <button class="play-button" id="play-quick-draw" type="button">Play this game</button>
+          </article>
+          <article class="game-card coming-card">
+            <div class="card-topline"><span class="game-number">06 / COMING SOON</span><span class="lock-icon" aria-hidden="true">✳</span></div>
+            <div class="game-art bubble-art" aria-hidden="true"><span class="bubble bubble-one"></span><span class="bubble bubble-two"></span><span class="bubble bubble-three"></span><span class="bubble bubble-four"></span></div>
+            <div class="card-info"><div><h3>Bubble Pop</h3><p>Pop a path through a rainbow of bubbles.</p></div></div>
+            <div class="coming-label"><span></span> ADDING THE FUN</div>
+          </article>
+          
           <article class="game-card coming-card">
             <div class="card-topline"><span class="game-number">07 / COMING SOON</span><span class="lock-icon" aria-hidden="true">✳</span></div>
             <div class="game-art word-art" aria-hidden="true"><span>W</span><span>O</span><span>R</span><span>D</span><b>✦</b></div>
@@ -215,6 +215,28 @@
         </div>
       </section>
 
+      <section class="quick-section" id="quick-draw" aria-labelledby="quick-title">
+        <div class="play-heading">
+          <div><p class="eyebrow section-eyebrow">HOLD YOUR NERVE</p><h2 id="quick-title">Quick Draw<span class="heading-period">.</span></h2></div>
+          <p class="section-aside">Wait for the signal, then draw as fast as you can.</p>
+        </div>
+        <div class="quick-panel">
+          <div class="quick-game-info">
+            <span class="round-label"><span class="pulse-dot" aria-hidden="true"></span> READY WHEN YOU ARE</span>
+            <h3>Wait for it.<br>Then tap fast.</h3>
+            <p>Start a round and watch the target. Tap only when it turns green. Jump the gun and you will have to try again.</p>
+            <div class="quick-stats" aria-label="Reaction time record"><div><span>BEST REACTION</span><strong id="quick-best">&mdash;</strong></div></div>
+            <button class="reset-button quick-start" id="quick-start" type="button">Start round</button>
+          </div>
+          <div class="quick-board-wrap">
+            <div class="board-status quick-status" id="quick-status" role="status" aria-live="polite">Press Start round when you're ready.</div>
+            <button class="quick-target" id="quick-target" type="button" aria-label="Quick Draw target. Start the game to begin." aria-describedby="quick-hint">
+              <span class="quick-target-mark" aria-hidden="true">!</span><span id="quick-target-label">READY?</span>
+            </button>
+            <p class="quick-hint" id="quick-hint">Click or press Enter on the target when it turns green.</p>
+          </div>
+        </div>
+      </section>
       <section class="closing-note" aria-label="Fun Zone message"><span aria-hidden="true">✳</span><p>Made for your five-minute break.<br><strong>And maybe the next five, too.</strong></p><span aria-hidden="true">✳</span></section>
     </main>
     <footer class="footer"><a class="brand footer-brand" href="#" aria-label="Fun Zone home"><span class="brand-mark" aria-hidden="true">F<span>!</span></span><span>fun<span class="brand-light">zone</span></span></a><span>GO ON. TAKE THAT BREAK.</span><span>© FUN ZONE 2026</span></footer>

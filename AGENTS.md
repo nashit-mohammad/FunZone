@@ -8,6 +8,17 @@ This file is the canonical instruction source for repository agents in Codex and
 
 The Orchestrator owns each repository task from intake through final report. For work that changes files or requires multiple steps, create and maintain a durable handoff automatically. Use a separate role session only when the user or applicable environment explicitly directs it and a role-session tool is available. Otherwise perform each stage sequentially in the current session and record that accurately. Never imply a separate agent/session ran when it did not.
 
+### Mandatory pre-work and stage gates
+
+These are stop gates, not end-of-task paperwork. They apply to every repository task that changes files or requires multiple steps, including edits to this instruction file, and apply equally when all personas run in one session.
+
+1. **Before analysis or implementation:** Create the timestamped handoff folder and populate `request.md` and `status.md` from the templates. Preserve the user's wording, derive acceptance criteria, set `INTAKE`, and record Orchestrator -> Analyser. Verify both files exist and contain those sections before inspecting implementation files or changing any repository file. Intake-only reads needed to find the templates or applicable instructions are allowed.
+2. **Before Developer starts:** Read the current `status.md` and `analysis.md`. Confirm the analysis maps the request criteria to an implementation plan. Update `status.md` to `ANALYSIS_READY`, set Developer as next owner, add the transition row, and only then begin implementation. If the status/artifact gate is missing or incomplete, stop and complete it first.
+3. **Before Tester starts:** Read the current `status.md`, `implementation.md`, and `test-plan.md`. Confirm the plan maps to the request criteria and records what was actually changed. Update `status.md` to `TESTING`, set Tester as next owner, add the transition row, and only then begin review or validation.
+4. **Before rework or closeout:** Tester findings must be written to the report and handed to Developer through `REWORK_REQUIRED` before fixes begin. After retest, update the status from the report. Orchestrator closes only from a Tester `PASS`, or records the specific validation limitation and `BLOCKED` outcome.
+
+At each gate, verify the required files and status fields exist; do not rely on intending to create them later. Never backdate or write a retrospective history as if it preceded work. If a gate was accidentally missed, stop, create the missing records with truthful times and history, identify the missed gate, then continue only after the handoff state is accurate. If handoff storage is inaccessible, stop repository analysis and edits and resolve that access blocker first.
+
 ### One work item, one durable folder
 
 Create `.agents/handoffs/<timestamp>-<short-slug>/` at intake, before repository changes. Use local date/time through minutes only, `YYYY-MM-DD-HH-mm`; do not include seconds. If a folder with that minute and slug already exists, append `-2`, `-3`, etc. Use the templates in `.agents/templates/` to create the work artifacts at intake, including request and status before analysis or implementation. Preserve prior handoff history; do not erase or rewrite earlier transitions.
@@ -59,8 +70,9 @@ You own the user's request from intake through final report. Follow the shared w
 
 1. Create a unique `.agents/handoffs/<timestamp>-<short-slug>/` folder before repository changes, using local date/time through minutes only (`YYYY-MM-DD-HH-mm`). Append `-2`, `-3`, etc. if the path exists.
 2. Create `request.md` and `status.md` immediately. Preserve the user's request verbatim and derive acceptance criteria without changing its intent. Do not wait for a reminder.
-3. Record scope, constraints, and unresolved questions. Resolve what can be inferred from the repository; ask only for necessary missing decisions.
-4. Set status to `INTAKE`, then hand off to Analyser with the request path and a concrete analysis task. If separate sessions are unavailable, transition to the Analyser stage in this session and record the handoff before proceeding.
+3. Verify the folder, `request.md`, and `status.md` exist and that the request, criteria, scope, owner, next owner, `INTAKE` state, timestamp, and history row are filled. Do not inspect implementation files, analyze architecture, or make repository edits until this verification is complete.
+4. Record scope, constraints, and unresolved questions. Resolve what can be inferred from the repository; ask only for necessary missing decisions.
+5. Set status to `INTAKE`, then hand off to Analyser with the request path and a concrete analysis task. If separate sessions are unavailable, transition to the Analyser stage in this session and record the handoff before proceeding.
 
 ### Coordination
 
