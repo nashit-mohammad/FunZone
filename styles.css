@@ -220,3 +220,27 @@ h2 { margin: 0; font-size: clamp(29px, 3vw, 39px); line-height: 1.1; letter-spac
   .dino-section { padding: 64px 22px; }.dino-panel { grid-template-columns: 1fr; padding: 23px 19px; gap: 25px; }.dino-game-info { padding: 0; }.dino-game-info h3 { margin: 15px 0 8px; font-size: 29px; }.dino-game-info h3 br { display: none; }.dino-game-info > p { max-width: 360px; margin-bottom: 16px; }.dino-stats { margin-bottom: 16px; }.dino-board-wrap { justify-self: center; max-width: 360px; }.dino-stage { height: 210px; }
   .quick-section { padding: 64px 22px; }.quick-panel { grid-template-columns: 1fr; padding: 23px 19px; gap: 25px; }.quick-game-info { padding: 0; }.quick-game-info h3 { margin: 15px 0 8px; font-size: 29px; }.quick-game-info h3 br { display: none; }.quick-game-info > p { max-width: 360px; margin-bottom: 16px; }.quick-stats { margin-bottom: 16px; }.quick-board-wrap { justify-self: center; max-width: 360px; }.quick-target { min-height: 210px; }
 }
+
+/* Light Shift */
+.featured-light-card { background: #f3e9c7; }
+.featured-light-card .card-arrow { color: #7d703d; }
+.light-artwork { grid-template-columns: repeat(3, 31px); grid-template-rows: repeat(3, 31px); gap: 10px; background: #30433d; }
+.light-artwork span { width: 100%; aspect-ratio: 1; border: 1px solid rgba(255,255,255,.13); border-radius: 50%; background: #53645e; }
+.light-artwork .is-lit { border-color: #eff49a; background: #d8f36a; box-shadow: 0 0 18px rgba(216,243,106,.55); }
+.light-section { padding: 88px max(10.2vw, 28px) 90px; background: #273533; }
+.light-section .play-heading h2 { color: var(--white); }.light-section .play-heading .section-aside { color: #a9b6b0; }.light-section .play-heading .section-eyebrow { color: #d8f36a; }
+.light-panel { display: grid; grid-template-columns: .8fr 1fr; gap: 30px; padding: 34px 42px; border: 1px solid rgba(255,255,255,.12); border-radius: 11px; background: linear-gradient(120deg,#344441,#293936); }
+.light-game-info { padding: 15px 0 11px; }.light-game-info h3 { margin: 22px 0 13px; color: var(--white); font-size: 35px; line-height: 1.03; letter-spacing: -1.7px; }.light-game-info > p { max-width: 285px; margin-bottom: 25px; color: #b0bdb7; font-size: 11px; line-height: 1.7; }
+.light-stats { display: flex; gap: 28px; margin: 0 0 24px; }.light-stats div { display: grid; gap: 5px; }.light-stats span { color: #a3b0a8; font-size: 8px; font-weight: 700; letter-spacing: .8px; }.light-stats strong { color: var(--white); font: 600 18px "Space Grotesk",sans-serif; }
+.light-board-wrap { width: 100%; max-width: 390px; justify-self: end; align-self: center; }.light-status { min-height: 29px; color: #e3e9e3; line-height: 1.5; }
+.light-board { width: min(100%, 360px); aspect-ratio: 1; display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 8px; margin-inline: auto; padding: 9px; border: 1px solid rgba(255,255,255,.12); border-radius: 12px; background: #1e2a28; }
+.light-tile { min-width: 0; display: grid; aspect-ratio: 1; place-items: center; padding: 0; border: 1px solid rgba(255,255,255,.12); border-radius: 9px; background: #34433f; cursor: pointer; transition: background .15s, border-color .15s, transform .15s; }
+.light-tile span { width: 32%; aspect-ratio: 1; border-radius: 50%; background: #73817b; transition: background .15s, box-shadow .15s; }
+.light-tile.is-on { border-color: rgba(237,246,137,.75); background: #596044; }.light-tile.is-on span { background: #e3f477; box-shadow: 0 0 18px rgba(216,243,106,.65); }
+.light-tile:hover:not(:disabled) { transform: translateY(-2px); border-color: #d8f36a; }.light-tile:disabled { cursor: default; }
+@media (max-width: 900px) {
+  .light-section { padding-left: 7vw; padding-right: 7vw; }.light-panel { padding: 28px; gap: 18px; }
+}
+@media (max-width: 650px) {
+  .light-section { padding: 64px 22px; }.light-panel { grid-template-columns: 1fr; padding: 23px 19px; gap: 25px; }.light-game-info { padding: 0; }.light-game-info h3 { margin: 15px 0 8px; font-size: 29px; }.light-game-info h3 br { display: none; }.light-game-info > p { max-width: 360px; margin-bottom: 16px; }.light-stats { margin-bottom: 16px; }.light-board-wrap { justify-self: center; max-width: 360px; }.light-board { gap: 5px; padding: 7px; }
+}

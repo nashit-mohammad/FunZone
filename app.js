@@ -629,4 +629,93 @@
       window.setTimeout(() => quickStartButton.focus({ preventScroll: true }), 350);
     });
   }
+
+  const lightPlayButton = document.querySelector("#play-light-shift");
+  const lightResetButton = document.querySelector("#light-reset");
+  const lightBoard = document.querySelector("#light-board");
+  if (lightPlayButton && lightResetButton && lightBoard) {
+    const lightStatus = document.querySelector("#light-status");
+    const lightMovesNode = document.querySelector("#light-moves");
+    const lightCountNode = document.querySelector("#light-count");
+    const boardWidth = 5;
+    const puzzleMoves = [0, 2, 6, 12, 18, 20, 24];
+    let lights = [];
+    let moves = 0;
+    let solved = false;
+
+    function flipLights(board, index) {
+      const row = Math.floor(index / boardWidth);
+      const column = index % boardWidth;
+      const neighbors = [
+        [row, column],
+        [row - 1, column],
+        [row + 1, column],
+        [row, column - 1],
+        [row, column + 1],
+      ];
+
+      neighbors.forEach(([neighborRow, neighborColumn]) => {
+        if (neighborRow < 0 || neighborRow >= boardWidth || neighborColumn < 0 || neighborColumn >= boardWidth) return;
+        const neighborIndex = neighborRow * boardWidth + neighborColumn;
+        board[neighborIndex] = !board[neighborIndex];
+      });
+    }
+
+    function drawLightBoard() {
+      const litCount = lights.filter(Boolean).length;
+      lightCountNode.textContent = litCount;
+      lightMovesNode.textContent = moves;
+      [...lightBoard.children].forEach((tile, index) => {
+        const isLit = lights[index];
+        tile.classList.toggle("is-on", isLit);
+        tile.disabled = solved;
+        tile.setAttribute("aria-pressed", String(isLit));
+        tile.setAttribute("aria-label", "Row " + (Math.floor(index / boardWidth) + 1) + ", column " + ((index % boardWidth) + 1) + ", " + (isLit ? "light on" : "light off"));
+      });
+    }
+
+    function resetLightPuzzle() {
+      lights = Array(boardWidth * boardWidth).fill(false);
+      puzzleMoves.forEach((index) => flipLights(lights, index));
+      moves = 0;
+      solved = false;
+      lightStatus.textContent = "Puzzle reset. Turn every light off to solve it.";
+      drawLightBoard();
+    }
+
+    function playLightTile(index) {
+      if (solved) return;
+      flipLights(lights, index);
+      moves += 1;
+      solved = lights.every((isLit) => !isLit);
+      drawLightBoard();
+      lightStatus.textContent = solved
+        ? "Grid cleared in " + moves + (moves === 1 ? " move. " : " moves. ") + "Puzzle solved!"
+        : moves + (moves === 1 ? " move. " : " moves. ") + lightCountNode.textContent + " lights still on.";
+    }
+
+    function createLightTiles() {
+      const tiles = Array.from({ length: boardWidth * boardWidth }, (_, index) => {
+        const tile = document.createElement("button");
+        tile.type = "button";
+        tile.className = "light-tile";
+        tile.setAttribute("aria-pressed", "false");
+        tile.innerHTML = "<span aria-hidden=\"true\"></span>";
+        tile.addEventListener("click", () => playLightTile(index));
+        return tile;
+      });
+      lightBoard.replaceChildren(...tiles);
+    }
+
+    createLightTiles();
+    resetLightPuzzle();
+    lightResetButton.addEventListener("click", resetLightPuzzle);
+    lightPlayButton.addEventListener("click", () => {
+      document.querySelector("#light-shift").scrollIntoView({
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+        block: "start",
+      });
+      window.setTimeout(() => lightBoard.querySelector(".light-tile")?.focus({ preventScroll: true }), 350);
+    });
+  }
 })();

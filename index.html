@@ -77,15 +77,21 @@
             <div class="card-info"><div><h3>Quick Draw</h3><p>Fast fingers. Faster bragging rights.</p></div><span class="player-tag">1 PLAYER</span></div>
             <button class="play-button" id="play-quick-draw" type="button">Play this game</button>
           </article>
+          <article class="game-card featured-card featured-light-card">
+            <div class="card-topline"><span class="game-number">06 / NOW PLAYING</span><span class="card-arrow" aria-hidden="true">✦</span></div>
+            <div class="game-art light-artwork" aria-hidden="true"><span class="is-lit"></span><span></span><span class="is-lit"></span><span></span><span class="is-lit"></span><span></span><span class="is-lit"></span><span></span><span class="is-lit"></span></div>
+            <div class="card-info"><div><h3>Light Shift</h3><p>Flip the grid until every light goes dark.</p></div><span class="player-tag">1 PLAYER</span></div>
+            <button class="play-button" id="play-light-shift" type="button">Play this game <span aria-hidden="true">→</span></button>
+          </article>
           <article class="game-card coming-card">
-            <div class="card-topline"><span class="game-number">06 / COMING SOON</span><span class="lock-icon" aria-hidden="true">✳</span></div>
+            <div class="card-topline"><span class="game-number">07 / COMING SOON</span><span class="lock-icon" aria-hidden="true">✳</span></div>
             <div class="game-art bubble-art" aria-hidden="true"><span class="bubble bubble-one"></span><span class="bubble bubble-two"></span><span class="bubble bubble-three"></span><span class="bubble bubble-four"></span></div>
             <div class="card-info"><div><h3>Bubble Pop</h3><p>Pop a path through a rainbow of bubbles.</p></div></div>
             <div class="coming-label"><span></span> ADDING THE FUN</div>
           </article>
           
           <article class="game-card coming-card">
-            <div class="card-topline"><span class="game-number">07 / COMING SOON</span><span class="lock-icon" aria-hidden="true">✳</span></div>
+            <div class="card-topline"><span class="game-number">08 / COMING SOON</span><span class="lock-icon" aria-hidden="true">✳</span></div>
             <div class="game-art word-art" aria-hidden="true"><span>W</span><span>O</span><span>R</span><span>D</span><b>✦</b></div>
             <div class="card-info"><div><h3>Word Wizard</h3><p>Mix letters and make a little magic.</p></div></div>
             <div class="coming-label"><span></span> ADDING THE FUN</div>
@@ -234,6 +240,28 @@
               <span class="quick-target-mark" aria-hidden="true">!</span><span id="quick-target-label">READY?</span>
             </button>
             <p class="quick-hint" id="quick-hint">Click or press Enter on the target when it turns green.</p>
+          </div>
+        </div>
+      </section>
+      <section class="light-section" id="light-shift" aria-labelledby="light-title">
+        <div class="play-heading">
+          <div><p class="eyebrow section-eyebrow">A LITTLE GRID LOGIC</p><h2 id="light-title">Light Shift<span class="heading-period">.</span></h2></div>
+          <p class="section-aside">One press flips a tile and its neighbors. Turn them all off.</p>
+        </div>
+        <div class="light-panel">
+          <div class="light-game-info">
+            <span class="round-label"><span class="pulse-dot" aria-hidden="true"></span> READY TO RESET THE GRID?</span>
+            <h3>Flip the lights.<br>Clear the board.</h3>
+            <p>Each move toggles the tile you press and the tiles directly above, below, left, and right. Switch off every light to solve the puzzle.</p>
+            <div class="light-stats" aria-label="Puzzle progress">
+              <div><span>MOVES</span><strong id="light-moves">0</strong></div>
+              <div><span>LIGHTS ON</span><strong id="light-count">0</strong></div>
+            </div>
+            <button class="reset-button" id="light-reset" type="button"><span aria-hidden="true">↻</span> Reset puzzle</button>
+          </div>
+          <div class="light-board-wrap">
+            <div class="board-status light-status" id="light-status" role="status" aria-live="polite">Turn every light off to solve the puzzle.</div>
+            <div class="light-board" id="light-board" role="group" aria-label="Light Shift puzzle board, five rows by five columns"></div>
           </div>
         </div>
       </section>
