@@ -83,17 +83,28 @@
             <div class="card-info"><div><h3>Light Shift</h3><p>Flip the grid until every light goes dark.</p></div><span class="player-tag">1 PLAYER</span></div>
             <button class="play-button" id="play-light-shift" type="button">Play this game <span aria-hidden="true">→</span></button>
           </article>
-          <article class="game-card coming-card">
-            <div class="card-topline"><span class="game-number">07 / COMING SOON</span><span class="lock-icon" aria-hidden="true">✳</span></div>
-            <div class="game-art bubble-art" aria-hidden="true"><span class="bubble bubble-one"></span><span class="bubble bubble-two"></span><span class="bubble bubble-three"></span><span class="bubble bubble-four"></span></div>
-            <div class="card-info"><div><h3>Bubble Pop</h3><p>Pop a path through a rainbow of bubbles.</p></div></div>
-            <div class="coming-label"><span></span> ADDING THE FUN</div>
+          <article class="game-card featured-card featured-bubble-card">
+            <div class="card-topline"><span class="game-number">07 / NOW PLAYING</span><span class="card-arrow" aria-hidden="true">✦</span></div>
+            <div class="game-art bubble-pop-art" aria-hidden="true"><span class="bubble-pop-chip chip-one"></span><span class="bubble-pop-chip chip-two"></span><span class="bubble-pop-chip chip-three"></span><span class="bubble-pop-chip chip-four"></span><span class="bubble-pop-chip chip-five"></span></div>
+            <div class="card-info"><div><h3>Bubble Pop</h3><p>Tap the glowing bubble before it slips away.</p></div><span class="player-tag">1 PLAYER</span></div>
+            <button class="play-button" id="play-bubble-pop" type="button">Play this game <span aria-hidden="true">→</span></button>
           </article>
-          
           <article class="game-card coming-card">
             <div class="card-topline"><span class="game-number">08 / COMING SOON</span><span class="lock-icon" aria-hidden="true">✳</span></div>
             <div class="game-art word-art" aria-hidden="true"><span>W</span><span>O</span><span>R</span><span>D</span><b>✦</b></div>
             <div class="card-info"><div><h3>Word Wizard</h3><p>Mix letters and make a little magic.</p></div></div>
+            <div class="coming-label"><span></span> ADDING THE FUN</div>
+          </article>
+          <article class="game-card coming-card">
+            <div class="card-topline"><span class="game-number">09 / COMING SOON</span><span class="lock-icon" aria-hidden="true">✳</span></div>
+            <div class="game-art sky-hop-art" aria-hidden="true"><span class="sky-hop-orb"></span><span class="sky-hop-cloud"></span><span class="sky-hop-cloud cloud-two"></span></div>
+            <div class="card-info"><div><h3>Sky Hop</h3><p>Leap through clouds and keep your rhythm.</p></div></div>
+            <div class="coming-label"><span></span> ADDING THE FUN</div>
+          </article>
+          <article class="game-card coming-card">
+            <div class="card-topline"><span class="game-number">10 / COMING SOON</span><span class="lock-icon" aria-hidden="true">✳</span></div>
+            <div class="game-art pixel-art" aria-hidden="true"><span class="pixel-tile tile-a"></span><span class="pixel-tile tile-b"></span><span class="pixel-tile tile-c"></span><span class="pixel-tile tile-d"></span></div>
+            <div class="card-info"><div><h3>Pixel Pairs</h3><p>Match tiny shapes and chase the streak.</p></div></div>
             <div class="coming-label"><span></span> ADDING THE FUN</div>
           </article>
         </div>
@@ -262,6 +273,29 @@
           <div class="light-board-wrap">
             <div class="board-status light-status" id="light-status" role="status" aria-live="polite">Turn every light off to solve the puzzle.</div>
             <div class="light-board" id="light-board" role="group" aria-label="Light Shift puzzle board, five rows by five columns"></div>
+          </div>
+        </div>
+      </section>
+      <section class="bubble-section" id="bubble-pop" aria-labelledby="bubble-title">
+        <div class="play-heading">
+          <div><p class="eyebrow section-eyebrow">A QUICK POP</p><h2 id="bubble-title">Bubble Pop<span class="heading-period">.</span></h2></div>
+          <p class="section-aside">Catch the glow. Pop the bubble. Keep the streak alive.</p>
+        </div>
+        <div class="bubble-panel">
+          <div class="bubble-game-info">
+            <span class="round-label"><span class="pulse-dot" aria-hidden="true"></span> READY FOR A BREATHER?</span>
+            <h3>Pop the bright<br>one.</h3>
+            <p>One bubble starts to glow at a time. Tap the bright one before the timer runs out and chase a bigger score.</p>
+            <div class="bubble-stats" aria-label="Bubble Pop score">
+              <div><span>SCORE</span><strong id="bubble-score">0</strong></div>
+              <div><span>BEST</span><strong id="bubble-best">0</strong></div>
+              <div><span>TIME</span><strong id="bubble-timer">20</strong></div>
+            </div>
+            <button class="reset-button" id="bubble-pop-reset" type="button"><span aria-hidden="true">↻</span> Start round</button>
+          </div>
+          <div class="bubble-board-wrap">
+            <div class="board-status bubble-status" id="bubble-pop-status" role="status" aria-live="polite">Press Start round when you're ready.</div>
+            <div class="bubble-board" id="bubble-pop-board" role="group" aria-label="Bubble Pop board"></div>
           </div>
         </div>
       </section>

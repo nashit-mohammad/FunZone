@@ -630,6 +630,104 @@
     });
   }
 
+  const bubblePlayButton = document.querySelector("#play-bubble-pop");
+  const bubbleResetButton = document.querySelector("#bubble-pop-reset");
+  const bubbleBoard = document.querySelector("#bubble-pop-board");
+  if (bubblePlayButton && bubbleResetButton && bubbleBoard) {
+    const bubbleStatus = document.querySelector("#bubble-pop-status");
+    const bubbleScoreNode = document.querySelector("#bubble-score");
+    const bubbleBestNode = document.querySelector("#bubble-best");
+    const bubbleTimerNode = document.querySelector("#bubble-timer");
+    const bubbleCount = 12;
+    const roundLength = 20;
+    let bubbleTiles = [];
+    let activeIndex = -1;
+    let score = 0;
+    let bestScore = 0;
+    let timeLeft = roundLength;
+    let timerId = null;
+    let roundOver = false;
+
+    function setBubbleTarget() {
+      if (roundOver) return;
+      const candidates = bubbleTiles.map((_, index) => index).filter((index) => index !== activeIndex);
+      const nextIndex = candidates[Math.floor(Math.random() * candidates.length)];
+      bubbleTiles.forEach((tile, index) => {
+        tile.classList.toggle("is-live", index === nextIndex);
+        tile.disabled = roundOver;
+      });
+      activeIndex = nextIndex;
+      bubbleStatus.textContent = "Pop the glowing bubble before the timer hits zero.";
+    }
+
+    function endBubbleRound() {
+      roundOver = true;
+      window.clearInterval(timerId);
+      timerId = null;
+      bubbleTiles.forEach((tile) => {
+        tile.disabled = true;
+        tile.classList.remove("is-live");
+      });
+      bubbleStatus.textContent = "Time is up! You scored " + score + " points. Tap Start round to play again.";
+    }
+
+    function startBubbleRound() {
+      roundOver = false;
+      score = 0;
+      timeLeft = roundLength;
+      bubbleScoreNode.textContent = "0";
+      bubbleTimerNode.textContent = String(timeLeft);
+      bubbleTiles.forEach((tile) => {
+        tile.classList.remove("is-live");
+        tile.disabled = false;
+      });
+      activeIndex = -1;
+      bubbleStatus.textContent = "A glowing bubble is coming. Get ready!";
+      setBubbleTarget();
+      window.clearInterval(timerId);
+      timerId = window.setInterval(() => {
+        timeLeft -= 1;
+        bubbleTimerNode.textContent = String(timeLeft);
+        if (timeLeft <= 0) {
+          endBubbleRound();
+        }
+      }, 1000);
+    }
+
+    function createBubbleTiles() {
+      bubbleTiles = Array.from({ length: bubbleCount }, (_, index) => {
+        const tile = document.createElement("button");
+        tile.type = "button";
+        tile.className = "bubble-pop-bubble";
+        tile.setAttribute("aria-label", "Bubble " + (index + 1) + ". Not active yet.");
+        tile.addEventListener("click", () => {
+          if (roundOver || index !== activeIndex) return;
+          score += 1;
+          bestScore = Math.max(bestScore, score);
+          bubbleScoreNode.textContent = String(score);
+          bubbleBestNode.textContent = String(bestScore);
+          tile.classList.remove("is-live");
+          tile.setAttribute("aria-label", "Bubble " + (index + 1) + ". Popped.");
+          bubbleStatus.textContent = "Nice pop! Keep the streak going.";
+          setBubbleTarget();
+        });
+        return tile;
+      });
+      bubbleBoard.replaceChildren(...bubbleTiles);
+    }
+
+    createBubbleTiles();
+    startBubbleRound();
+    bubbleResetButton.addEventListener("click", startBubbleRound);
+    bubblePlayButton.addEventListener("click", () => {
+      document.querySelector("#bubble-pop").scrollIntoView({
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+        block: "start",
+      });
+      window.setTimeout(() => bubbleResetButton.focus({ preventScroll: true }), 350);
+    });
+  }
+
   const lightPlayButton = document.querySelector("#play-light-shift");
   const lightResetButton = document.querySelector("#light-reset");
   const lightBoard = document.querySelector("#light-board");
