@@ -2,7 +2,7 @@ name: Daily FunZone Game
 
 on:
   schedule:
-    - cron: "37 14 * * *"
+    - cron: "0 9 * * *"
       timezone: "America/Toronto"
   workflow_dispatch:
 
@@ -36,7 +36,7 @@ jobs:
           work_item="$(TZ=America/Toronto date +'%Y-%m-%d-%H-%M')-daily-game-${GITHUB_RUN_ID}"
           work_dir=".agents/handoffs/$work_item"
           created_at="$(TZ=America/Toronto date --iso-8601=seconds)"
-          prompt_file=".github/codex/prompts/daily-game-run-${GITHUB_RUN_ID}.md"
+          prompt_file=".github/copilot/prompts/daily-game-run-${GITHUB_RUN_ID}.md"
           mkdir -p "$work_dir"
           cp .agents/templates/request.md "$work_dir/request.md"
           cp .agents/templates/analysis.md "$work_dir/analysis.md"
@@ -85,13 +85,13 @@ jobs:
 
           | Time | From | To | State | Artifact(s) | Summary |
           |---|---|---|---|---|---|
-          | $created_at | Orchestrator | Analyser | INTAKE | request.md | Automated daily-game intake recorded; proceed through the standard persona stages in this Codex run. |
+          | $created_at | Orchestrator | Analyser | INTAKE | Automated daily-game intake recorded; proceed through the standard persona stages in this Copilot CLI run. |
 
           ## Open questions and risks
 
           - Confirm a distinct game mechanic is available and record any validation or remote PR-list limitation.
           EOF
-          cp .github/codex/prompts/daily-game.md "$prompt_file"
+          cp .github/copilot/prompts/daily-game.md "$prompt_file"
           open_prs="$(gh pr list --base main --state open --json title,headRefName --jq '.[] | select(.title | startswith("FunZone game:")) | "- \(.headRefName): \(.title)"')"
           {
             echo
@@ -101,14 +101,26 @@ jobs:
           echo "work_dir=$work_dir" >> "$GITHUB_OUTPUT"
           echo "prompt_file=$prompt_file" >> "$GITHUB_OUTPUT"
 
-      - name: Run Codex to create today's game
-        uses: openai/codex-action@v1
+      - name: Set up Node.js for Copilot CLI
+        uses: actions/setup-node@v4
         with:
-          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
-          prompt-file: ${{ steps.prepare.outputs.prompt_file }}
-          sandbox: workspace-write
+          node-version: "22"
+
+      - name: Install GitHub Copilot CLI
+        run: npm install --global @github/copilot
+
+      - name: Run Copilot to create today's game
+        shell: bash
         env:
+          COPILOT_GITHUB_TOKEN: ${{ secrets['COPILOT_GITHUB_TOKEN'] }}
+          PROMPT_FILE: ${{ steps.prepare.outputs.prompt_file }}
           DAILY_GAME_HANDOFF_DIR: ${{ steps.prepare.outputs.work_dir }}
+        run: |
+          if [[ -z "${COPILOT_GITHUB_TOKEN:-}" ]]; then
+            echo "::error::Configure the COPILOT_GITHUB_TOKEN Actions secret with Copilot Requests access."
+            exit 1
+          fi
+          copilot -p "$(cat "$PROMPT_FILE")" --allow-all-tools --secret-env-vars=COPILOT_GITHUB_TOKEN --no-auto-update
 
       - name: Save role handoff artifact
         uses: actions/upload-artifact@v4
@@ -140,11 +152,11 @@ jobs:
         with:
           token: ${{ github.token }}
           base: main
-          branch: codex/daily-game-${{ github.run_id }}
+          branch: copilot/daily-game-${{ github.run_id }}
           delete-branch: true
           title: ${{ steps.pr-title.outputs.title }}
           body: |
-            Codex proposed a new playable game for FunZone review.
+            GitHub Copilot proposed a new playable game for FunZone review.
 
             Implementation and validation notes are in the Actions artifact `daily-game-handoff-${{ github.run_id }}`.
 
