@@ -33,8 +33,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          open_game_prs="$(gh pr list --base main --state open --json title,headRefName --jq '.[] | select(.title | startswith("FunZone game:")) | "- \(.headRefName): \(.title)"')"
-          last_merged_game_pr="$(gh pr list --base main --state merged --sort updated --direction desc --limit 20 --json title --jq '.[] | select(.title | startswith("FunZone game:")) | .title' | head -n 1)"
+          open_game_prs="$(gh pr list --base main --state open --limit 100 --json title,headRefName --jq '.[] | select(.title | startswith("FunZone game:")) | "- \(.headRefName): \(.title)"')"
+          last_merged_game_pr="$(gh pr list --base main --state merged --limit 100 --json title,headRefName --jq '.[] | select(.title | startswith("FunZone game:")) | .title' | head -n 1)"
 
           if [[ -n "$open_game_prs" ]]; then
             echo "skip=true" >> "$GITHUB_OUTPUT"
