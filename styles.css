@@ -278,3 +278,32 @@ h2 { margin: 0; font-size: clamp(29px, 3vw, 39px); line-height: 1.1; letter-spac
 @media (max-width: 650px) {
   .light-section { padding: 64px 22px; }.light-panel { grid-template-columns: 1fr; padding: 23px 19px; gap: 25px; }.light-game-info { padding: 0; }.light-game-info h3 { margin: 15px 0 8px; font-size: 29px; }.light-game-info h3 br { display: none; }.light-game-info > p { max-width: 360px; margin-bottom: 16px; }.light-stats { margin-bottom: 16px; }.light-board-wrap { justify-self: center; max-width: 360px; }.light-board { gap: 5px; padding: 7px; }
 }
+
+/* Merge Garden */
+.featured-merge-card { background: #e7e9d1; }
+.featured-merge-card .card-arrow { color: #72804b; }
+.merge-art { grid-template-columns: repeat(2, 53px); grid-template-rows: repeat(2, 53px); gap: 7px; background: #4a5b43; }
+.merge-art span { display: grid; place-items: center; border-radius: 7px; color: #4b543b; background: #dbe9ab; font: 700 18px "Space Grotesk",sans-serif; }
+.merge-art span:nth-child(2) { background: #c5dc8c; }.merge-art span:nth-child(3) { background: #f2d98e; }.merge-art span:nth-child(4) { color: #fff; background: #bc8f57; }
+.merge-section { padding: 88px max(10.2vw, 28px) 90px; background: #293329; }
+.merge-section .play-heading h2 { color: var(--white); }.merge-section .play-heading .section-aside { color: #b7c3a5; }.merge-section .play-heading .section-eyebrow { color: #d8f36a; }
+.merge-panel { display: grid; grid-template-columns: .8fr 1fr; gap: 30px; padding: 34px 42px; border: 1px solid rgba(255,255,255,.12); border-radius: 11px; background: linear-gradient(120deg,#394637,#2c3a32); }
+.merge-game-info { padding: 15px 0 11px; }.merge-game-info h3 { margin: 22px 0 13px; color: var(--white); font-size: 35px; line-height: 1.03; letter-spacing: -1.7px; }.merge-game-info > p { max-width: 285px; margin-bottom: 25px; color: #c0cbbc; font-size: 11px; line-height: 1.7; }
+.merge-stats { display: flex; gap: 28px; margin: 0 0 24px; }.merge-stats div { display: grid; gap: 5px; }.merge-stats span { color: #b3c0ad; font-size: 8px; font-weight: 700; letter-spacing: .8px; }.merge-stats strong { color: var(--white); font: 600 18px "Space Grotesk",sans-serif; }
+.merge-board-wrap { width: 100%; max-width: 390px; justify-self: end; align-self: center; }
+.merge-status { min-height: 29px; color: #e7eddf; line-height: 1.5; }
+.merge-board { width: min(100%, 360px); aspect-ratio: 1; display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 8px; margin-inline: auto; padding: 9px; border: 1px solid rgba(255,255,255,.14); border-radius: 12px; background: #253128; }
+.merge-board:focus-visible { outline-color: var(--lime); outline-offset: 4px; }
+.merge-tile { min-width: 0; display: grid; place-items: center; overflow: hidden; border-radius: 8px; color: #4b543b; background: #344038; font: 700 clamp(12px, 4vw, 27px)/1 "Space Grotesk",sans-serif; }
+.merge-tile.has-value { background: #dbe9ab; }.merge-tile[data-value="4"] { background: #c5dc8c; }.merge-tile[data-value="8"] { background: #f2d98e; }.merge-tile[data-value="16"] { color: #fff; background: #bc8f57; }.merge-tile[data-value="32"] { color: #fff; background: #c47e53; }.merge-tile[data-value="64"] { color: #fff; background: #c9674e; }.merge-tile[data-value="128"],.merge-tile[data-value="256"],.merge-tile[data-value="512"] { color: #263327; background: #d9ef82; }.merge-tile[data-value="1024"],.merge-tile[data-value="2048"] { color: #1e2a20; background: #f5f0b5; box-shadow: inset 0 0 0 2px rgba(255,255,255,.42); }
+.merge-controls-hint { margin: 12px 0 9px; color: #bdc9b7; font-size: 10px; line-height: 1.5; text-align: center; }
+.merge-controls { width: max-content; display: grid; grid-template: ". up ." 43px "left down right" 43px / 43px 43px 43px; gap: 5px; margin: 0 auto; }
+.merge-controls button { display: grid; place-items: center; border: 1px solid rgba(255,255,255,.17); border-radius: 8px; color: var(--white); background: #405044; cursor: pointer; font-size: 22px; line-height: 1; }
+.merge-controls button:hover { color: var(--ink); background: var(--lime); }
+.merge-controls .merge-up { grid-area: up; }.merge-controls .merge-left { grid-area: left; }.merge-controls .merge-down { grid-area: down; }.merge-controls .merge-right { grid-area: right; }
+@media (max-width: 900px) {
+  .merge-section { padding-left: 7vw; padding-right: 7vw; }.merge-panel { padding: 28px; gap: 18px; }
+}
+@media (max-width: 650px) {
+  .merge-section { padding: 64px 22px; }.merge-panel { grid-template-columns: 1fr; padding: 23px 19px; gap: 25px; }.merge-game-info { padding: 0; }.merge-game-info h3 { margin: 15px 0 8px; font-size: 29px; }.merge-game-info h3 br { display: none; }.merge-game-info > p { max-width: 360px; margin-bottom: 16px; }.merge-stats { margin-bottom: 16px; }.merge-board-wrap { justify-self: center; max-width: 360px; }.merge-board { gap: 5px; padding: 7px; }
+}

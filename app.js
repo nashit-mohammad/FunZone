@@ -816,4 +816,160 @@
       window.setTimeout(() => lightBoard.querySelector(".light-tile")?.focus({ preventScroll: true }), 350);
     });
   }
+
+  const mergePlayButton = document.querySelector("#play-merge-garden");
+  const mergeResetButton = document.querySelector("#merge-reset");
+  const mergeBoard = document.querySelector("#merge-board");
+  if (mergePlayButton && mergeResetButton && mergeBoard) {
+    const mergeStatus = document.querySelector("#merge-status");
+    const mergeScoreNode = document.querySelector("#merge-score");
+    const mergeControls = [...document.querySelectorAll("[data-merge-direction]")];
+    const boardWidth = 4;
+    const targetValue = 2048;
+    const mergeCells = Array.from({ length: boardWidth * boardWidth }, () => {
+      const cell = document.createElement("div");
+      cell.className = "merge-tile";
+      cell.setAttribute("role", "gridcell");
+      mergeBoard.append(cell);
+      return cell;
+    });
+    let tiles = Array(boardWidth * boardWidth).fill(0);
+    let score = 0;
+    let hasWon = false;
+    let gameOver = false;
+
+    function renderMergeBoard() {
+      tiles.forEach((value, index) => {
+        const row = Math.floor(index / boardWidth) + 1;
+        const column = index % boardWidth + 1;
+        const cell = mergeCells[index];
+        cell.className = "merge-tile";
+        cell.textContent = value ? String(value) : "";
+        cell.setAttribute("aria-label", "Row " + row + ", column " + column + (value ? ", " + value : ", empty"));
+        if (value) {
+          cell.classList.add("has-value");
+          cell.dataset.value = String(value);
+        } else {
+          delete cell.dataset.value;
+        }
+      });
+      mergeScoreNode.textContent = String(score);
+    }
+
+    function addRandomTile() {
+      const emptyCells = tiles.reduce((positions, value, index) => {
+        if (!value) positions.push(index);
+        return positions;
+      }, []);
+      if (!emptyCells.length) return;
+      const index = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+      tiles[index] = Math.random() < 0.9 ? 2 : 4;
+    }
+
+    function hasAvailableMove() {
+      return tiles.some((value, index) => {
+        if (!value) return true;
+        const row = Math.floor(index / boardWidth);
+        const column = index % boardWidth;
+        return (column < boardWidth - 1 && value === tiles[index + 1])
+          || (row < boardWidth - 1 && value === tiles[index + boardWidth]);
+      });
+    }
+
+    function getLineIndices(direction, line) {
+      return Array.from({ length: boardWidth }, (_, offset) => {
+        if (direction === "left") return line * boardWidth + offset;
+        if (direction === "right") return line * boardWidth + boardWidth - 1 - offset;
+        if (direction === "up") return offset * boardWidth + line;
+        return (boardWidth - 1 - offset) * boardWidth + line;
+      });
+    }
+
+    function moveTiles(direction) {
+      if (gameOver) return;
+      let changed = false;
+      let points = 0;
+
+      for (let line = 0; line < boardWidth; line += 1) {
+        const indices = getLineIndices(direction, line);
+        const values = indices.map((index) => tiles[index]).filter(Boolean);
+        const mergedValues = [];
+        for (let index = 0; index < values.length; index += 1) {
+          if (values[index] === values[index + 1]) {
+            const mergedValue = values[index] * 2;
+            mergedValues.push(mergedValue);
+            points += mergedValue;
+            index += 1;
+          } else {
+            mergedValues.push(values[index]);
+          }
+        }
+
+        while (mergedValues.length < boardWidth) mergedValues.push(0);
+        indices.forEach((tileIndex, index) => {
+          if (tiles[tileIndex] !== mergedValues[index]) changed = true;
+          tiles[tileIndex] = mergedValues[index];
+        });
+      }
+
+      if (!changed) {
+        mergeStatus.textContent = "No tiles can slide that way.";
+        return;
+      }
+
+      addRandomTile();
+      score += points;
+      const justWon = !hasWon && tiles.some((value) => value >= targetValue);
+      hasWon = hasWon || justWon;
+      gameOver = !hasAvailableMove();
+      renderMergeBoard();
+
+      if (justWon && gameOver) {
+        mergeStatus.textContent = "2048 reached! You win, but no moves remain. Start a new game to play again.";
+      } else if (justWon) {
+        mergeStatus.textContent = "2048 reached! You win. Keep playing or start a new game.";
+      } else if (gameOver) {
+        mergeStatus.textContent = "No moves left. Final score: " + score + ". Start a new game to play again.";
+      } else {
+        mergeStatus.textContent = "Slid " + direction + (points ? ". Merged tiles for " + points + " points." : ".")
+          + " Score: " + score + ".";
+      }
+    }
+
+    function resetMergeGame() {
+      tiles = Array(boardWidth * boardWidth).fill(0);
+      score = 0;
+      hasWon = false;
+      gameOver = false;
+      addRandomTile();
+      addRandomTile();
+      renderMergeBoard();
+      mergeStatus.textContent = "New garden planted. Slide matching tiles together and reach 2048.";
+    }
+
+    mergeBoard.addEventListener("keydown", (event) => {
+      const directionByKey = {
+        ArrowUp: "up",
+        ArrowDown: "down",
+        ArrowLeft: "left",
+        ArrowRight: "right",
+      };
+      const direction = directionByKey[event.key];
+      if (!direction) return;
+      event.preventDefault();
+      moveTiles(direction);
+    });
+    mergeControls.forEach((control) => {
+      control.addEventListener("click", () => moveTiles(control.dataset.mergeDirection));
+    });
+    mergeResetButton.addEventListener("click", resetMergeGame);
+    mergePlayButton.addEventListener("click", () => {
+      document.querySelector("#merge-garden").scrollIntoView({
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+        block: "start",
+      });
+      window.setTimeout(() => mergeBoard.focus({ preventScroll: true }), 350);
+    });
+    resetMergeGame();
+  }
 })();
