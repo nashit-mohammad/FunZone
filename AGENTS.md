@@ -1,5 +1,3 @@
-@RTK.md
-
 # Agent workflow and personas
 
 This file is the canonical instruction source for repository agents in Codex and GitHub Copilot. It contains the complete workflow and all four personas. Do not move persona instructions into other files or require agents to consult another persona document.
