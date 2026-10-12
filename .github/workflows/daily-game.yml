@@ -258,6 +258,20 @@ jobs:
           body: |
             GitHub Copilot proposed a new playable game for FunZone review.
 
+            ## Agent handoff flow
+
+            Orchestrator -> Analyser -> Developer -> Tester -> Orchestrator
+
+            This daily game run follows the repository handoff workflow recorded in the work item artifacts under `.agents/handoffs/` and preserves the request, analysis, implementation, test plan, and test report for review.
+
+            - Request and intake are captured by the Orchestrator.
+            - The implementation plan is prepared by the Analyser.
+            - The code change is implemented by the Developer.
+            - Validation is recorded by the Tester.
+            - The final state is returned to the Orchestrator for closeout and review.
+
+            This PR is intentionally review-only; it is not auto-merged.
+
             Implementation and validation notes are in the Actions artifact `daily-game-handoff-${{ github.run_id }}`.
 
             This PR is based on `main`. It is not merged automatically.
