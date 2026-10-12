@@ -15,7 +15,7 @@ Each run copies the standard role templates from `.agents/templates/` into the w
 3. Merge this workflow, prompt, and setup guide to the repository's `main` branch. Scheduled workflows run from the default branch.
 4. Under **Actions → Daily FunZone Game**, select **Run workflow** for the first run, then review the created PR and its handoff artifact.
 
-The token is not stored in this repository. Every game remains unmerged until a human reviews and merges its PR.
+The workflow does not use custom email sending or any external SMTP dependency. Every game remains unmerged until a human reviews and merges its PR.
 
 ## Current workflow behavior
 
