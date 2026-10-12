@@ -168,8 +168,16 @@ jobs:
         run: |
           game_name="$(sed -n 's/^Game name: //p' "$HANDOFF_DIR/implementation.md" | head -n 1 | tr -d '\r')"
           game_name="${game_name:0:70}"
-          if [[ -z "$game_name" ]]; then game_name="New game"; fi
-          echo "title=FunZone game: $game_name" >> "$GITHUB_OUTPUT"
+          date_stamp="$(date +'%d_%m_%Y')"
+
+          if [[ -z "$game_name" ]]; then
+            game_name="New game"
+          fi
+
+          title_name="$(printf '%s' "$game_name" | sed -E 's/([[:space:]]|[-_]+)/ /g; s/[[:space:]]+/ /g; s/^ //; s/ $//')"
+          title_name="$(printf '%s' "$title_name" | awk '{for (i = 1; i <= NF; i++) $i = toupper(substr($i,1,1)) substr($i,2)}1')"
+
+          echo "title=FunZone game: ${title_name} - ${date_stamp}" >> "$GITHUB_OUTPUT"
 
       - name: Remove run-specific prompt
         if: ${{ steps.merge-gate.outputs.skip != 'true' }}
