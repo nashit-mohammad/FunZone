@@ -39,6 +39,16 @@
     })[character]);
   }
 
+  function scrollToGame(targetSelector) {
+    const target = document.querySelector(targetSelector);
+    if (!target) return;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    target.scrollIntoView({
+      behavior: prefersReducedMotion ? "auto" : "smooth",
+      block: "start",
+    });
+  }
+
   function setStatus() {
     let message;
     let player = currentPlayer;
@@ -158,7 +168,7 @@
   tileSizeInput.addEventListener("input", updateTileSize);
   updateTileSize();
   playButton.addEventListener("click", () => {
-    document.querySelector("#tic-tac-toe").scrollIntoView({ behavior: "smooth", block: "start" });
+    scrollToGame("#tic-tac-toe");
     window.setTimeout(() => cells[0].focus({ preventScroll: true }), 350);
   });
 
@@ -266,7 +276,7 @@
 
     memoryResetButton.addEventListener("click", startMemoryGame);
     memoryPlayButton.addEventListener("click", () => {
-      document.querySelector("#memory-match").scrollIntoView({ behavior: "smooth", block: "start" });
+      scrollToGame("#memory-match");
       window.setTimeout(() => memoryBoard.querySelector(".memory-card")?.focus({ preventScroll: true }), 350);
     });
     startMemoryGame();
@@ -400,10 +410,7 @@
     });
     scoutResetButton.addEventListener("click", resetScout);
     scoutPlayButton.addEventListener("click", () => {
-      document.querySelector("#star-scout").scrollIntoView({
-        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
-        block: "start",
-      });
+      scrollToGame("#star-scout");
       window.setTimeout(() => scoutMap.focus({ preventScroll: true }), 350);
     });
     drawScoutMap();
@@ -555,10 +562,7 @@
     dinoJumpButton.addEventListener("click", jumpDino);
     dinoResetButton.addEventListener("click", startDinoRun);
     dinoPlayButton.addEventListener("click", () => {
-      document.querySelector("#dino-dash").scrollIntoView({
-        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
-        block: "start",
-      });
+      scrollToGame("#dino-dash");
       window.setTimeout(() => dinoStartButton.focus({ preventScroll: true }), 350);
     });
     resetDinoRun();
@@ -622,10 +626,7 @@
 
     quickStartButton.addEventListener("click", startQuickDraw);
     quickPlayButton.addEventListener("click", () => {
-      document.querySelector("#quick-draw").scrollIntoView({
-        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
-        block: "start",
-      });
+      scrollToGame("#quick-draw");
       window.setTimeout(() => quickStartButton.focus({ preventScroll: true }), 350);
     });
   }
@@ -720,10 +721,7 @@
     startBubbleRound();
     bubbleResetButton.addEventListener("click", startBubbleRound);
     bubblePlayButton.addEventListener("click", () => {
-      document.querySelector("#bubble-pop").scrollIntoView({
-        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
-        block: "start",
-      });
+      scrollToGame("#bubble-pop");
       window.setTimeout(() => bubbleResetButton.focus({ preventScroll: true }), 350);
     });
   }
@@ -809,10 +807,7 @@
     resetLightPuzzle();
     lightResetButton.addEventListener("click", resetLightPuzzle);
     lightPlayButton.addEventListener("click", () => {
-      document.querySelector("#light-shift").scrollIntoView({
-        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
-        block: "start",
-      });
+      scrollToGame("#light-shift");
       window.setTimeout(() => lightBoard.querySelector(".light-tile")?.focus({ preventScroll: true }), 350);
     });
   }
@@ -877,12 +872,19 @@
     }
 
     function getLineIndices(direction, line) {
-      return Array.from({ length: boardWidth }, (_, offset) => {
-        if (direction === "left") return line * boardWidth + offset;
-        if (direction === "right") return line * boardWidth + boardWidth - 1 - offset;
-        if (direction === "up") return offset * boardWidth + line;
-        return (boardWidth - 1 - offset) * boardWidth + line;
-      });
+      const indices = [];
+      for (let offset = 0; offset < boardWidth; offset += 1) {
+        if (direction === "left") {
+          indices.push(line * boardWidth + offset);
+        } else if (direction === "right") {
+          indices.push(line * boardWidth + (boardWidth - 1 - offset));
+        } else if (direction === "up") {
+          indices.push(offset * boardWidth + line);
+        } else {
+          indices.push((boardWidth - 1 - offset) * boardWidth + line);
+        }
+      }
+      return indices;
     }
 
     function moveTiles(direction) {
@@ -892,23 +894,33 @@
 
       for (let line = 0; line < boardWidth; line += 1) {
         const indices = getLineIndices(direction, line);
-        const values = indices.map((index) => tiles[index]).filter(Boolean);
+        const values = indices
+          .map((index) => tiles[index])
+          .filter((value) => value !== 0);
         const mergedValues = [];
+
         for (let index = 0; index < values.length; index += 1) {
-          if (values[index] === values[index + 1]) {
-            const mergedValue = values[index] * 2;
+          const currentValue = values[index];
+          const nextValue = values[index + 1];
+
+          if (nextValue === currentValue) {
+            const mergedValue = currentValue * 2;
             mergedValues.push(mergedValue);
             points += mergedValue;
             index += 1;
           } else {
-            mergedValues.push(values[index]);
+            mergedValues.push(currentValue);
           }
         }
 
-        while (mergedValues.length < boardWidth) mergedValues.push(0);
+        while (mergedValues.length < boardWidth) {
+          mergedValues.push(0);
+        }
+
         indices.forEach((tileIndex, index) => {
-          if (tiles[tileIndex] !== mergedValues[index]) changed = true;
-          tiles[tileIndex] = mergedValues[index];
+          const nextValue = mergedValues[index];
+          if (tiles[tileIndex] !== nextValue) changed = true;
+          tiles[tileIndex] = nextValue;
         });
       }
 
@@ -931,8 +943,7 @@
       } else if (gameOver) {
         mergeStatus.textContent = "No moves left. Final score: " + score + ". Start a new game to play again.";
       } else {
-        mergeStatus.textContent = "Slid " + direction + (points ? ". Merged tiles for " + points + " points." : ".")
-          + " Score: " + score + ".";
+        mergeStatus.textContent = "Slid " + direction + (points ? ". Merged tiles for " + points + " points." : ".") + " Score: " + score + ".";
       }
     }
 
@@ -964,10 +975,7 @@
     });
     mergeResetButton.addEventListener("click", resetMergeGame);
     mergePlayButton.addEventListener("click", () => {
-      document.querySelector("#merge-garden").scrollIntoView({
-        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
-        block: "start",
-      });
+      scrollToGame("#merge-garden");
       window.setTimeout(() => mergeBoard.focus({ preventScroll: true }), 350);
     });
     resetMergeGame();
