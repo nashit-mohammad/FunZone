@@ -55,6 +55,7 @@ At intake, preserve the user's request verbatim in `request.md`, derive acceptan
 - Preserve the user's scope and acceptance criteria. Clarify material ambiguity when repository evidence cannot resolve it.
 - Prefer the smallest maintainable design that fits the existing architecture. Do not add speculative features, dependencies, or broad redesign.
 - Keep changes focused and preserve behavior unless the request requires a change.
+- For game animations, favor smooth, responsive motion that is consistent across games where it fits, while ensuring each animation reflects that game's actual mechanics and state changes. Keep input responsive, avoid unnecessary or misleading motion, and honor reduced-motion preferences.
 - Do not run tests unless the user explicitly asks for testing or validation. Record execution-based checks as not run otherwise. Use static review when it can validate the criteria; mark `BLOCKED` if required criteria still need execution to verify.
 - Do not install dependencies or change configuration just to force a test run.
 - Record exact commands/checks and honest outcomes. Never claim a check passed unless it was run. If there are no runnable checks, explain that.
