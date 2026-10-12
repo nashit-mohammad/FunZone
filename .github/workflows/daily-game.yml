@@ -27,30 +27,23 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Check whether a previous daily-game PR was merged
+      - name: Check whether any daily-game PR is open
         id: merge-gate
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           open_game_prs="$(gh pr list --base main --state open --limit 100 --json title,headRefName --jq '.[] | select(.title | startswith("FunZone game:")) | "- \(.headRefName): \(.title)"')"
-          last_merged_game_pr="$(gh pr list --base main --state merged --limit 100 --json title,headRefName --jq '.[] | select(.title | startswith("FunZone game:")) | .title' | head -n 1)"
 
           if [[ -n "$open_game_prs" ]]; then
             echo "skip=true" >> "$GITHUB_OUTPUT"
-            echo "An open FunZone game PR already exists; skipping this run until it is merged."
+            echo "An open FunZone game PR already exists; skipping this run until it is closed or merged."
             printf '%s\n' "$open_game_prs"
             exit 0
           fi
 
-          if [[ -z "$last_merged_game_pr" ]]; then
-            echo "skip=true" >> "$GITHUB_OUTPUT"
-            echo "No merged FunZone game PR exists on main yet; skipping this run until the previous daily-game PR is merged."
-            exit 0
-          fi
-
           echo "skip=false" >> "$GITHUB_OUTPUT"
-          echo "A previous FunZone game PR is already merged to main; proceeding with the next daily game."
+          echo "No open FunZone game PR exists; proceeding with the next daily game."
 
       - name: Prepare handoff and check open game PRs
         if: ${{ steps.merge-gate.outputs.skip != 'true' }}

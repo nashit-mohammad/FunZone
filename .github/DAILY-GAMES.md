@@ -2,7 +2,7 @@
 
 The `Daily FunZone Game` workflow uses GitHub Copilot CLI to add one distinct, playable game every day at 9:00 AM America/Toronto. It runs on GitHub-hosted infrastructure while the local PC may be off.
 
-The workflow deliberately waits for the previous daily-game review PR to be merged to `main` before opening a new one. If an open `FunZone game:` PR still exists, or if no prior daily-game PR has ever merged to `main`, the workflow exits early and does not create a new game or PR. This keeps only one active game review at a time.
+The workflow exits early whenever an open `FunZone game:` PR is already present on `main`. If there is no open daily-game PR, the workflow proceeds to create the next game and review PR. This keeps only one active game review at a time.
 
 Every run checks out `main`, prepares a timestamped handoff folder under `.agents/handoffs/<YYYY-MM-DD-HH-mm>-daily-game-<run-id>/`, and creates a dedicated branch named `copilot/daily-game-<run-id>` with `main` as the PR base. The workflow also inspects open FunZone game PR titles to help avoid duplicate mechanics and product proposals. PRs are for review only; there is no auto-merge.
 
@@ -20,7 +20,7 @@ The token is not stored in this repository. Every game remains unmerged until a 
 ## Current workflow behavior
 
 - Uses `actions/setup-node` and installs the GitHub Copilot CLI via `npm install --global @github/copilot`.
-- Checks for any open `FunZone game:` PRs and for at least one earlier merged `FunZone game:` PR on `main`; it exits early when the merge gate is not satisfied.
+- Checks for any open `FunZone game:` PR on `main`; it exits early whenever one is still open.
 - Runs the prompt from `.github/copilot/prompts/daily-game-run-<run-id>.md` with the exact handoff directory injected into the prompt text.
 - Saves the generated role artifacts as the workflow artifact named `daily-game-handoff-<run_id>`.
 - Opens a review PR with `peter-evans/create-pull-request@v8` using the title `FunZone game: <Game name>` when the run changed application files.
