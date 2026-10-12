@@ -313,9 +313,11 @@
     let scoutMoves = 0;
     let scoutFinished = false;
 
-    function drawScoutMap() {
+    function drawScoutMap(slideDirection = null) {
       scoutTiles.forEach((tile, index) => {
         tile.className = "star-cell";
+        tile.style.removeProperty("--slide-x");
+        tile.style.removeProperty("--slide-y");
         if (rocks.has(index)) {
           tile.classList.add("is-rock");
           tile.textContent = "🪨";
@@ -330,7 +332,13 @@
         }
         if (index === scoutPosition) {
           tile.classList.add("has-scout");
-          tile.textContent = "🧑‍🚀";
+          tile.innerHTML = '<span class="scout-marker">🧑‍🚀</span>';
+          if (slideDirection) {
+            tile.style.setProperty("--slide-x", -slideDirection.column * 100 + "%");
+            tile.style.setProperty("--slide-y", -slideDirection.row * 100 + "%");
+            void tile.offsetWidth;
+            tile.classList.add("scout-sliding");
+          }
         }
       });
       starCountNode.textContent = collectedStars.size + " / " + starPositions.size;
@@ -381,7 +389,7 @@
       }
 
       scoutStatus.textContent = message;
-      drawScoutMap();
+      drawScoutMap(direction);
     }
 
     function resetScout() {
@@ -833,17 +841,30 @@
     let hasWon = false;
     let gameOver = false;
 
-    function renderMergeBoard() {
+    function renderMergeBoard(movements = new Map(), spawnedTiles = new Set(), mergedTiles = new Set()) {
       tiles.forEach((value, index) => {
         const row = Math.floor(index / boardWidth) + 1;
         const column = index % boardWidth + 1;
         const cell = mergeCells[index];
         cell.className = "merge-tile";
+        cell.style.removeProperty("--slide-x");
+        cell.style.removeProperty("--slide-y");
         cell.textContent = value ? String(value) : "";
         cell.setAttribute("aria-label", "Row " + row + ", column " + column + (value ? ", " + value : ", empty"));
         if (value) {
           cell.classList.add("has-value");
           cell.dataset.value = String(value);
+          if (spawnedTiles.has(index)) cell.classList.add("is-new");
+          if (mergedTiles.has(index)) cell.classList.add("is-merged");
+          const originIndex = movements.get(index);
+          if (originIndex !== undefined && originIndex !== index) {
+            const originRect = mergeCells[originIndex].getBoundingClientRect();
+            const destinationRect = cell.getBoundingClientRect();
+            cell.style.setProperty("--slide-x", originRect.left - destinationRect.left + "px");
+            cell.style.setProperty("--slide-y", originRect.top - destinationRect.top + "px");
+            void cell.offsetWidth;
+            cell.classList.add("is-sliding");
+          }
         } else {
           delete cell.dataset.value;
         }
@@ -856,9 +877,10 @@
         if (!value) positions.push(index);
         return positions;
       }, []);
-      if (!emptyCells.length) return;
+      if (!emptyCells.length) return -1;
       const index = emptyCells[Math.floor(Math.random() * emptyCells.length)];
       tiles[index] = Math.random() < 0.9 ? 2 : 4;
+      return index;
     }
 
     function hasAvailableMove() {
@@ -891,36 +913,45 @@
       if (gameOver) return;
       let changed = false;
       let points = 0;
+      const movements = new Map();
+      const mergedTiles = new Set();
 
       for (let line = 0; line < boardWidth; line += 1) {
         const indices = getLineIndices(direction, line);
         const values = indices
-          .map((index) => tiles[index])
-          .filter((value) => value !== 0);
+          .map((originIndex) => ({ value: tiles[originIndex], originIndex }))
+          .filter((tile) => tile.value !== 0);
         const mergedValues = [];
 
         for (let index = 0; index < values.length; index += 1) {
-          const currentValue = values[index];
-          const nextValue = values[index + 1];
+          const currentTile = values[index];
+          const nextTile = values[index + 1];
 
-          if (nextValue === currentValue) {
-            const mergedValue = currentValue * 2;
-            mergedValues.push(mergedValue);
+          if (nextTile && nextTile.value === currentTile.value) {
+            const mergedValue = currentTile.value * 2;
+            const destinationIndex = indices[mergedValues.length];
+            const originIndex = currentTile.originIndex === destinationIndex
+              ? nextTile.originIndex
+              : currentTile.originIndex;
+            mergedValues.push({ value: mergedValue, originIndex, merged: true });
             points += mergedValue;
             index += 1;
           } else {
-            mergedValues.push(currentValue);
+            mergedValues.push(currentTile);
           }
         }
 
         while (mergedValues.length < boardWidth) {
-          mergedValues.push(0);
+          mergedValues.push({ value: 0, originIndex: -1, merged: false });
         }
 
         indices.forEach((tileIndex, index) => {
-          const nextValue = mergedValues[index];
+          const nextTile = mergedValues[index];
+          const nextValue = nextTile.value;
           if (tiles[tileIndex] !== nextValue) changed = true;
           tiles[tileIndex] = nextValue;
+          if (nextValue && nextTile.originIndex !== tileIndex) movements.set(tileIndex, nextTile.originIndex);
+          if (nextTile.merged) mergedTiles.add(tileIndex);
         });
       }
 
@@ -929,12 +960,12 @@
         return;
       }
 
-      addRandomTile();
+      const spawnedIndex = addRandomTile();
       score += points;
       const justWon = !hasWon && tiles.some((value) => value >= targetValue);
       hasWon = hasWon || justWon;
       gameOver = !hasAvailableMove();
-      renderMergeBoard();
+      renderMergeBoard(movements, new Set([spawnedIndex]), mergedTiles);
 
       if (justWon && gameOver) {
         mergeStatus.textContent = "2048 reached! You win, but no moves remain. Start a new game to play again.";
@@ -952,9 +983,9 @@
       score = 0;
       hasWon = false;
       gameOver = false;
-      addRandomTile();
-      addRandomTile();
-      renderMergeBoard();
+      const firstTileIndex = addRandomTile();
+      const secondTileIndex = addRandomTile();
+      renderMergeBoard(new Map(), new Set([firstTileIndex, secondTileIndex]));
       mergeStatus.textContent = "New garden planted. Slide matching tiles together and reach 2048.";
     }
 
