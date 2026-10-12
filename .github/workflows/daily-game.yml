@@ -166,14 +166,28 @@ jobs:
         env:
           HANDOFF_DIR: ${{ steps.prepare.outputs.work_dir }}
         run: |
-          game_name="$(sed -n 's/^Game name: //p' "$HANDOFF_DIR/implementation.md" | head -n 1 | tr -d '\r')"
-          game_name="${game_name:0:70}"
-          date_stamp="$(date +'%d_%m_%Y')"
+          game_name=""
+
+          raw_name="$(grep -Ei '^[[:space:]]*#?[[:space:]]*game[[:space:]]+name:[[:space:]]*' "$HANDOFF_DIR/implementation.md" | head -n 1 | tr -d '\r')"
+          if [[ -n "$raw_name" ]]; then
+            game_name="$(printf '%s\n' "$raw_name" | sed -E 's/^[^:]*:[[:space:]]*//; s/^[[:space:]]+//; s/[[:space:]]+$//')"
+          fi
+
+          if [[ -z "$game_name" ]]; then
+            game_name="$(awk '
+              BEGIN { found = 0 }
+              /^[[:space:]]*#?[[:space:]]*Game[[:space:]]+name[[:space:]]*:?[[:space:]]*$/ { found = 1; next }
+              found && NF { print; exit }
+            ' "$HANDOFF_DIR/implementation.md" | tr -d '\r')"
+          fi
 
           if [[ -z "$game_name" ]]; then
             game_name="New game"
+          else
+            game_name="${game_name:0:70}"
           fi
 
+          date_stamp="$(date +'%d_%m_%Y')"
           title_name="$(printf '%s' "$game_name" | sed -E 's/([[:space:]]|[-_]+)/ /g; s/[[:space:]]+/ /g; s/^ //; s/ $//')"
           title_name="$(printf '%s' "$title_name" | awk '{for (i = 1; i <= NF; i++) $i = toupper(substr($i,1,1)) substr($i,2)}1')"
 
@@ -186,13 +200,20 @@ jobs:
           PROMPT_FILE: ${{ steps.prepare.outputs.prompt_file }}
         run: rm -f "$PROMPT_FILE"
 
+      - name: Refresh remote refs before creating the review branch
+        if: ${{ steps.merge-gate.outputs.skip != 'true' }}
+        shell: bash
+        run: |
+          git fetch --prune origin
+          git remote prune origin
+
       - name: Open a review PR from a dedicated main-based branch
         if: ${{ steps.merge-gate.outputs.skip != 'true' }}
         uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ github.token }}
           base: main
-          branch: copilot/daily-game-${{ github.run_id }}
+          branch: copilot/daily-game-${{ github.run_id }}-${{ github.run_attempt }}
           delete-branch: true
           title: ${{ steps.pr-title.outputs.title }}
           body: |
