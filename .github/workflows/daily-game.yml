@@ -150,12 +150,51 @@ jobs:
           fi
           copilot -p "$(cat "$PROMPT_FILE")" --allow-all-tools --secret-env-vars=COPILOT_GITHUB_TOKEN --no-auto-update
 
+      - name: Rename handoff folder to the logical game name
+        if: ${{ steps.merge-gate.outputs.skip != 'true' }}
+        id: handoff
+        shell: bash
+        env:
+          HANDOFF_DIR: ${{ steps.prepare.outputs.work_dir }}
+        run: |
+          src_dir="$HANDOFF_DIR"
+          game_name=""
+
+          raw_name="$(grep -Ei '^[[:space:]]*#?[[:space:]]*game[[:space:]]+name:[[:space:]]*' "$src_dir/implementation.md" | head -n 1 | tr -d '\r')"
+          if [[ -n "$raw_name" ]]; then
+            game_name="$(printf '%s\n' "$raw_name" | sed -E 's/^[^:]*:[[:space:]]*//; s/^[[:space:]]+//; s/[[:space:]]+$//')"
+          fi
+
+          if [[ -z "$game_name" ]]; then
+            game_name="$(awk '
+              BEGIN { found = 0 }
+              /^[[:space:]]*#?[[:space:]]*Game[[:space:]]+name[[:space:]]*:?[[:space:]]*$/ { found = 1; next }
+              found && NF { print; exit }
+            ' "$src_dir/implementation.md" | tr -d '\r')"
+          fi
+
+          if [[ -z "$game_name" ]]; then
+            game_name="daily-game"
+          fi
+
+          safe_name="$(printf '%s' "$game_name" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+|-+$//g; s/-+/-/g')"
+          safe_name="${safe_name:-daily-game}"
+          date_stamp="$(date +'%d_%m_%Y')"
+          parent_dir="$(dirname "$src_dir")"
+          dst_dir="${parent_dir}/${safe_name}-${date_stamp}-daily-game-${GITHUB_RUN_ID}"
+
+          if [[ "$src_dir" != "$dst_dir" ]]; then
+            mv "$src_dir" "$dst_dir"
+          fi
+
+          echo "work_dir=$dst_dir" >> "$GITHUB_OUTPUT"
+
       - name: Save role handoff artifact
         if: ${{ steps.merge-gate.outputs.skip != 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: daily-game-handoff-${{ github.run_id }}
-          path: ${{ steps.prepare.outputs.work_dir }}
+          path: ${{ steps.handoff.outputs.work_dir }}
           if-no-files-found: error
           retention-days: 90
 
@@ -164,7 +203,7 @@ jobs:
         id: pr-title
         shell: bash
         env:
-          HANDOFF_DIR: ${{ steps.prepare.outputs.work_dir }}
+          HANDOFF_DIR: ${{ steps.handoff.outputs.work_dir }}
         run: |
           game_name=""
 
