@@ -89,20 +89,26 @@
             <div class="card-info"><div><h3>Bubble Pop</h3><p>Tap the glowing bubble before it slips away.</p></div><span class="player-tag">1 PLAYER</span></div>
             <button class="play-button" id="play-bubble-pop" type="button">Play this game <span aria-hidden="true">→</span></button>
           </article>
+          <article class="game-card featured-card featured-merge-card">
+            <div class="card-topline"><span class="game-number">08 / NOW PLAYING</span><span class="card-arrow" aria-hidden="true">✦</span></div>
+            <div class="game-art merge-art" aria-hidden="true"><span>2</span><span>4</span><span>8</span><span>16</span></div>
+            <div class="card-info"><div><h3>Merge Garden</h3><p>Slide, merge, and grow a 2048 tile.</p></div><span class="player-tag">1 PLAYER</span></div>
+            <button class="play-button" id="play-merge-garden" type="button">Play this game <span aria-hidden="true">→</span></button>
+          </article>
           <article class="game-card coming-card">
-            <div class="card-topline"><span class="game-number">08 / COMING SOON</span><span class="lock-icon" aria-hidden="true">✳</span></div>
+            <div class="card-topline"><span class="game-number">09 / COMING SOON</span><span class="lock-icon" aria-hidden="true">✳</span></div>
             <div class="game-art word-art" aria-hidden="true"><span>W</span><span>O</span><span>R</span><span>D</span><b>✦</b></div>
             <div class="card-info"><div><h3>Word Wizard</h3><p>Mix letters and make a little magic.</p></div></div>
             <div class="coming-label"><span></span> ADDING THE FUN</div>
           </article>
           <article class="game-card coming-card">
-            <div class="card-topline"><span class="game-number">09 / COMING SOON</span><span class="lock-icon" aria-hidden="true">✳</span></div>
+            <div class="card-topline"><span class="game-number">10 / COMING SOON</span><span class="lock-icon" aria-hidden="true">✳</span></div>
             <div class="game-art sky-hop-art" aria-hidden="true"><span class="sky-hop-orb"></span><span class="sky-hop-cloud"></span><span class="sky-hop-cloud cloud-two"></span></div>
             <div class="card-info"><div><h3>Sky Hop</h3><p>Leap through clouds and keep your rhythm.</p></div></div>
             <div class="coming-label"><span></span> ADDING THE FUN</div>
           </article>
           <article class="game-card coming-card">
-            <div class="card-topline"><span class="game-number">10 / COMING SOON</span><span class="lock-icon" aria-hidden="true">✳</span></div>
+            <div class="card-topline"><span class="game-number">11 / COMING SOON</span><span class="lock-icon" aria-hidden="true">✳</span></div>
             <div class="game-art pixel-art" aria-hidden="true"><span class="pixel-tile tile-a"></span><span class="pixel-tile tile-b"></span><span class="pixel-tile tile-c"></span><span class="pixel-tile tile-d"></span></div>
             <div class="card-info"><div><h3>Pixel Pairs</h3><p>Match tiny shapes and chase the streak.</p></div></div>
             <div class="coming-label"><span></span> ADDING THE FUN</div>
@@ -296,6 +302,35 @@
           <div class="bubble-board-wrap">
             <div class="board-status bubble-status" id="bubble-pop-status" role="status" aria-live="polite">Press Start round when you're ready.</div>
             <div class="bubble-board" id="bubble-pop-board" role="group" aria-label="Bubble Pop board"></div>
+          </div>
+        </div>
+      </section>
+      <section class="merge-section" id="merge-garden" aria-labelledby="merge-title">
+        <div class="play-heading">
+          <div><p class="eyebrow section-eyebrow">SLIDE, MERGE, GROW</p><h2 id="merge-title">Merge Garden<span class="heading-period">.</span></h2></div>
+          <p class="section-aside">Can you grow a tile all the way to 2048?</p>
+        </div>
+        <div class="merge-panel">
+          <div class="merge-game-info">
+            <span class="round-label"><span class="pulse-dot" aria-hidden="true"></span> READY TO GROW?</span>
+            <h3>Small seeds.<br>Big numbers.</h3>
+            <p>Slide the tiles in any direction. Matching numbers merge into one bigger tile. Reach 2048 to win, then keep playing if you like.</p>
+            <div class="merge-stats" aria-label="Game score">
+              <div><span>SCORE</span><strong id="merge-score">0</strong></div>
+              <div><span>GOAL</span><strong>2048</strong></div>
+            </div>
+            <button class="reset-button" id="merge-reset" type="button"><span aria-hidden="true">↻</span> New game</button>
+          </div>
+          <div class="merge-board-wrap">
+            <div class="board-status merge-status" id="merge-status" role="status" aria-live="polite">Use the arrow keys or direction buttons to combine matching tiles.</div>
+            <div class="merge-board" id="merge-board" role="grid" tabindex="0" aria-label="Merge Garden board, four rows by four columns. Focus here and use the arrow keys to slide tiles." aria-describedby="merge-controls-hint"></div>
+            <p class="merge-controls-hint" id="merge-controls-hint">Focus the board and press an arrow key, or tap a direction. Each move adds a 2 or 4.</p>
+            <div class="merge-controls" role="group" aria-label="Slide tiles">
+              <button class="merge-up" type="button" data-merge-direction="up" aria-label="Slide up">↑</button>
+              <button class="merge-left" type="button" data-merge-direction="left" aria-label="Slide left">←</button>
+              <button class="merge-down" type="button" data-merge-direction="down" aria-label="Slide down">↓</button>
+              <button class="merge-right" type="button" data-merge-direction="right" aria-label="Slide right">→</button>
+            </div>
           </div>
         </div>
       </section>
